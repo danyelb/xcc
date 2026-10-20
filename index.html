@@ -567,7 +567,7 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
   { id:"dormit", title:"Pentru dormit", kind:"req", items:[
     { id:"sac-dormit", name:"Sac de dormit călduros", note:"Ambalat într-o pungă (cerut în listă). Pentru bărbați contează temperatura-limită, nu cea de confort (ISO 23537): ai nevoie de −5 °C sau mai jos.", variants:[
       {tier:"buget", shop:"Decathlon", name:"QUECHUA Sac de dormit camping 0 °C Arpenaz", price:299.99, url:D("sac-de-dormit-de-camping-0degc-arpenaz","340423"), desc:"Confort 0 °C, limită −9 °C, dreptunghiular — încapi comod. Dar 2,2 kg și 29 L împachetat: se prinde pe exterior și mănâncă din cele 15 kg."},
-      {tier:"mediu", shop:"Decathlon", name:"SIMOND Sac de dormit trekking 0 °C MT500", price:399.99, url:D("sac-de-dormit-de-trekking-0degc-mt500","346447"), desc:"Confort 0 °C, limită −5 °C, sintetic — izolează și când e umed. Ia mărimea XL (1,54 kg), e mai lată la umeri."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND Sac de dormit trekking 0 °C MT500", price:399.99, url:D("sac-de-dormit-de-trekking-0degc-mt500","346447"), desc:"Confort 0 °C, limită −5 °C, sintetic — izolează și când e umed. Dacă ești lat în umeri, ia mărimea XL (1,54 kg)."},
       {tier:"premium", shop:"Decathlon", name:"SIMOND Sac de dormit 0 °C din puf MT900", price:899.99, url:D("sac-de-dormit-de-trekking-0degc-din-puf-usor-si-compact-mt900","355074"), desc:"Confort 0 °C, limită −5 °C, 930 g, 11 L. Cea mai mare economie de greutate, dar puful ud nu mai ține cald: ține-l în sac impermeabil."}
     ]},
     { id:"izopren", name:"Izopren sau saltea", note:"Pe sol înghețat ai nevoie de R ≥ 4. Valorile R se adună când pui două saltele una peste alta. Salteaua MT900 ușoară (R 1,5) din versiunea anterioară a listei e de vară — nu o lua.", variants:[
@@ -667,20 +667,21 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
   ]}
   ];
   var NOTES = [
+    "Bocancii nu sunt în listă încă. Dacă îți iei unii noi, ia-i din timp și poartă-i câteva zile înainte de XCC, ca să nu faci bătături.",
     "Prețurile și disponibilitatea sunt de pe Decathlon.ro și eMAG.ro, verificate pe 10 septembrie 2026; sacii de dormit, saltelele și mănușile re-verificate pe 19 septembrie. Se schimbă — verifică pe pagina produsului înainte să comanzi.",
     "Butelia de gaz pierde presiune la frig: noaptea bag-o în sacul de dormit. Bateriile frontalei se descarcă mai repede la frig — ține frontala într-un buzunar interior.",
     "Temperaturile din Maramureș: normalele 1991–2020 pentru Ocna Șugatag și 2014–2026 pentru stația Iezer (sursa: Wikipedia, tabelele climatice ale stațiilor).",
     "Ce e marcat „per echipă” se împarte: un cort, o busolă, un fierăstrău, o coardă. Nu le cumpărați fiecare separat — vorbiți în echipă înainte.",
     "Pentru coardă: doar varianta dinamică certificată (premium) e făcută pentru a prelua o cădere. Celelalte două sunt corzi utilitare — bune pentru legat, tras, improvizat, nu pentru asigurare.",
     "La eMAG, verifică vânzătorul și termenul de livrare: multe dintre produsele ieftine vin de la terți, cu 1–2 săptămâni de așteptare.",
-    "Decathlon are magazin în Oradea — pentru rucsac, ghete de rezervă, sac de dormit și saltea merită să le probezi fizic înainte.",
+    "Rucsacul, bocancii, sacul de dormit și salteaua merită probate fizic înainte, într-un magazin Decathlon sau de munte.",
     "Bifele, alegerile și notițele se salvează în baza ta de date Supabase după ce intri cu linkul primit pe email, și le vezi la fel pe telefon și pe laptop. Fără cont rămân doar în browserul respectiv.",
     "Pe OLX: cere poze cu eticheta interioară și cu obiectul în uz, întreabă anul cumpărării, și plătește la întâlnire sau ramburs. Refuză orice vânzător care insistă pe un link de „livrare OLX” trimis pe WhatsApp — e cea mai comună fraudă de pe piață.",
     "Prețurile „second corect” sunt estimări bazate pe medianele reale cerute pe OLX și Vinted azi, corectate pentru starea obiectului. Un anunț mai scump nu e neapărat o țeapă — dar ai un punct de plecare pentru negociere."
   ];
   var TIERS = ["buget","mediu","premium"];
   var TIER_LABEL = {buget:"Buget", mediu:"Mediu", premium:"Premium"};
-  var OWNED = {"rucsac":1,"frontala":1,"baterii":1,"izopren":1,"sac-dormit":1,"jacheta":1,"pantaloni-scurti":1,"tricou":1,"incaltaminte-sport":1};
+  var OWNED = {};
   var MARKET = [
   { cat:"Echipament personal", groups:[
     { name:"Rucsac de drumeție", verdict:"yes", where:["OLX","Vinted"],
@@ -1309,8 +1310,17 @@ function pull(){
   return sb.from(TABLE).select("done,picks,notes").eq("user_id", uid).maybeSingle().then(function(res){
     if(res.error){ setSync("err", "Nu pot citi din cont (" + res.error.message + ")."); return; }
     if(!res.data){
-      /* prima intrare: urc ce ai deja în browser */
-      dirty = true; return flush();
+      /* prima intrare: întâi datele pregătite pentru emailul tău, altfel ce ai bifat în browser */
+      return sb.rpc("xcc_claim_seed").then(function(r){
+        var row = r && !r.error && Array.isArray(r.data) ? r.data[0] : null;
+        if(row){
+          state = clean(row); lsSet(LS_KEY, state);
+          renderTabs(); renderSummary(); renderList();
+          setSync("ok", "Salvat în cont · " + userEmail);
+          return;
+        }
+        dirty = true; return flush();
+      });
     }
     if(dirty || writing) return;
     state = clean(res.data); lsSet(LS_KEY, state);
@@ -1328,8 +1338,9 @@ function showSignedOut(msg){
   if(!sb){ setSync("local", configured ? "Nu se poate conecta la baza de date. Bifele rămân în acest browser." : "Salvat în acest browser"); return; }
   setSync("local", msg || "Salvat doar în acest browser. Intră în cont ca să le ai și pe telefon.");
 }
+var signingOut = false;
 function handleSession(session){
-  if(!session || !session.user){ showSignedOut(); return; }
+  if(!session || !session.user){ if(signingOut) signingOut = false; else showSignedOut(); return; }
   if(uid === session.user.id) return;
   uid = session.user.id; userEmail = session.user.email || "";
   loginEl.hidden = true; outEl.hidden = false;
@@ -1354,7 +1365,15 @@ if(sb){
     });
   });
   outEl.addEventListener("click", function(){
-    sb.auth.signOut().then(function(){ showSignedOut("Ai ieșit din cont. Bifele rămân și în acest browser."); });
+    signingOut = true;
+    sb.auth.signOut().then(function(){
+      /* bifele tale rămân în cont; pe acest dispozitiv lista revine la varianta generală */
+      clearTimeout(wTimer); dirty = false;
+      state = clean(null); lsSet(LS_KEY, state);
+      openId = null; keep = {};
+      renderTabs(); renderSummary(); renderList();
+      showSignedOut("Ai ieșit din cont. Bifele tale rămân în cont.");
+    });
   });
   document.addEventListener("visibilitychange", function(){
     if(document.visibilityState === "visible" && uid && !dirty && !writing) pull();
