@@ -1,6 +1,6 @@
 # Echipament XCC
 
-Lista de echipament pentru XCC (7–10 noiembrie 2026, Maramureș), cu variante buget / mediu / premium la fiecare poziție.
+Lista de echipament pentru XCC (5–8 noiembrie 2026, Maramureș), cu variante buget / mediu / premium la fiecare poziție.
 
 Pagina e statică și stă pe GitHub Pages: https://danyelb.github.io/xcc/
 
