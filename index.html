@@ -1,0 +1,1370 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Echipament XCC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* O singură coloană de bifat: tab-uri, sumar, grupuri de rânduri care se deschid pe loc, sub rândul apăsat */
+:root{
+  color-scheme:dark;
+  --bg:#0d0f0e;
+  --surface:#171a18;
+  --surface-2:#1f2321;
+  --line:#2c312e;
+  --line-2:#232825;
+  --ink:#eef1ec;
+  --ink-2:#c5cbc5;
+  --muted:#8a928c;
+  --accent:#62c08f;
+  --accent-ink:#8ad6ad;
+  --miss:#ff7b6b;
+  --t-buget:#62c08f;
+  --t-mediu:#8bb3d9;
+  --t-premium:#f09a5e;
+  --warn:#e8b94f;
+  --pill-bg:#eef1ec;
+  --pill-ink:#0d0f0e;
+  --focus:#9fd0ff;
+  --f-display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme:light;
+    --bg:#f1f2ee; --surface:#ffffff; --surface-2:#f6f7f3; --line:#d9ddd5; --line-2:#e7eae3;
+    --ink:#141715; --ink-2:#3b413d; --muted:#69716b;
+    --accent:#2c7a53; --accent-ink:#1f6444; --miss:#d2402f;
+    --t-buget:#2c7a53; --t-mediu:#2f5f86; --t-premium:#b4561c; --warn:#9a6a00;
+    --pill-bg:#141715; --pill-ink:#f1f2ee; --focus:#1f6fd6;
+  }
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f1f2ee; --surface:#ffffff; --surface-2:#f6f7f3; --line:#d9ddd5; --line-2:#e7eae3;
+  --ink:#141715; --ink-2:#3b413d; --muted:#69716b;
+  --accent:#2c7a53; --accent-ink:#1f6444; --miss:#d2402f;
+  --t-buget:#2c7a53; --t-mediu:#2f5f86; --t-premium:#b4561c; --warn:#9a6a00;
+  --pill-bg:#141715; --pill-ink:#f1f2ee; --focus:#1f6fd6;
+}
+
+html{font-size:14px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.45}
+*,*::before,*::after{box-sizing:border-box}
+button{font:inherit;color:inherit}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.app{
+  max-width:820px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:28px 72px;
+  display:grid;gap:22px;
+}
+
+/* ---------- antet ---------- */
+.top{display:grid;gap:6px}
+.eyebrow{
+  margin:0;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+}
+h1{
+  margin:0;font-family:var(--f-display);font-weight:600;
+  font-size:clamp(2.2rem, 7vw, 3.1rem);line-height:.95;letter-spacing:.005em;text-wrap:balance;
+}
+
+/* ---------- tab-uri ---------- */
+.tabs{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+}
+.tab{
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+  padding:9px 8px;border:1px solid transparent;border-radius:10px;background:none;
+  font-weight:600;font-size:.95rem;color:var(--muted);cursor:pointer;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.tab-n{
+  font-family:var(--f-mono);font-size:.74rem;font-weight:600;line-height:1;
+  padding:3px 7px;border-radius:99px;background:var(--line-2);color:var(--muted);font-variant-numeric:tabular-nums;
+}
+.tab-n.has-miss{color:var(--miss)}
+.tab-n.is-zero{color:var(--accent-ink)}
+
+/* ---------- sumar ---------- */
+.sum{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:15px 18px;display:grid;gap:11px;
+}
+.sum-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.big{
+  font-family:var(--f-display);font-weight:600;font-size:2.7rem;line-height:.85;color:var(--miss);
+  font-variant-numeric:tabular-nums;
+}
+.big.is-zero{color:var(--accent)}
+.sum-txt{font-size:1rem;font-weight:600;color:var(--muted)}
+.bar{height:8px;border-radius:99px;background:var(--line-2);overflow:hidden}
+.bar span{display:block;height:100%;border-radius:99px;background:var(--ink);transition:width .35s ease}
+.cost{
+  margin:0;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;
+  font-size:.86rem;color:var(--muted);
+}
+.cost b{font-family:var(--f-mono);font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.cost .c-buget{color:var(--t-buget)} .cost .c-mediu{color:var(--t-mediu)} .cost .c-premium{color:var(--t-premium)}
+.cost .lab{font-weight:600}
+.mine{margin:0;font-size:.86rem;color:var(--ink-2)}
+.mine b{font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.sum-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.hint{margin:0;font-size:.92rem;color:var(--muted);flex:1 1 240px;min-width:0}
+.pill{
+  border:1px solid var(--pill-bg);background:var(--pill-bg);color:var(--pill-ink);
+  border-radius:99px;padding:7px 15px;font-weight:600;font-size:.9rem;cursor:pointer;white-space:nowrap;
+}
+.pill[aria-pressed="true"]{background:transparent;color:var(--ink);border-color:var(--line)}
+.pill[aria-pressed="true"]::before{content:"\2713\00a0";color:var(--accent)}
+.sync{margin:0;font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:7px}
+.sync::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none}
+.sync[data-s="ok"]::before{background:var(--accent)}
+.sync[data-s="saving"]::before{background:var(--warn)}
+
+.sync[data-s="err"]::before{background:var(--miss)}
+.acct{display:grid;gap:8px;padding-top:10px;border-top:1px solid var(--line-2)}
+.login{display:flex;flex-wrap:wrap;gap:8px}
+.login input{
+  flex:1 1 220px;min-width:0;font:inherit;font-size:max(16px, .95rem);color:var(--ink);background:var(--surface-2);
+  border:1px solid var(--line);border-radius:10px;padding:8px 12px;
+}
+.login input::placeholder{color:var(--muted)}
+.btn{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:8px 14px;font-weight:600;font-size:.9rem;cursor:pointer}
+.btn:hover{border-color:var(--ink-2)}
+.btn:disabled{opacity:.6;cursor:default}
+.linkbtn{justify-self:start;background:none;border:0;padding:0;color:var(--muted);font-size:.85rem;text-decoration:underline;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- grupuri și rânduri ---------- */
+#list{display:grid;gap:22px}
+.grp{display:grid;gap:10px}
+.grp-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.grp-head h2{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.45rem;line-height:1.05}
+.grp-n{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.grp-tag{font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.grp-empty{margin:0;padding:14px 16px;border:1px dashed var(--line);border-radius:var(--r);color:var(--muted);font-size:.92rem}
+
+.rows{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.row + .row{border-top:1px solid var(--line-2)}
+.row:first-child,.row:first-child .row-main{border-top-left-radius:var(--r);border-top-right-radius:var(--r)}
+.row:last-child,.row:last-child .panel{border-bottom-left-radius:var(--r);border-bottom-right-radius:var(--r)}
+.row-main{display:flex;align-items:flex-start;gap:4px;padding:7px 10px 7px 6px}
+.row.is-open .row-main{background:var(--surface-2)}
+
+.chk{
+  flex:none;width:40px;height:40px;display:grid;place-items:center;
+  background:none;border:0;padding:0;cursor:pointer;border-radius:10px;
+}
+.box{
+  width:22px;height:22px;border-radius:6px;border:2px solid var(--muted);
+  display:grid;place-items:center;transition:background .15s, border-color .15s;
+}
+.box svg{width:14px;height:14px;fill:none;stroke:transparent;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.chk[aria-checked="true"] .box{background:var(--accent);border-color:var(--accent)}
+.chk[aria-checked="true"] .box svg{stroke:var(--bg)}
+.chk:hover .box{border-color:var(--ink-2)}
+
+.row-open{
+  flex:1;min-width:0;display:flex;align-items:flex-start;gap:12px;
+  background:none;border:0;padding:9px 4px 5px;text-align:left;cursor:pointer;border-radius:8px;
+}
+.row-text{flex:1;min-width:0;display:grid;gap:3px}
+.row-name{font-weight:600;font-size:1.02rem;line-height:1.3;color:var(--ink);overflow-wrap:anywhere}
+.row.is-done .row-name{color:var(--muted)}
+.row-sub{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.86rem;color:var(--muted)}
+.from{font-family:var(--f-mono);font-size:.8rem;font-variant-numeric:tabular-nums}
+.row-note{font-style:italic;color:var(--muted);font-size:.95rem;overflow-wrap:anywhere}
+.tag{
+  display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;
+  padding:3px 10px;border-radius:99px;line-height:1.2;
+}
+.tag-buget{color:var(--t-buget);background:color-mix(in srgb, var(--t-buget) 16%, transparent)}
+.tag-mediu{color:var(--t-mediu);background:color-mix(in srgb, var(--t-mediu) 16%, transparent)}
+.tag-premium{color:var(--t-premium);background:color-mix(in srgb, var(--t-premium) 16%, transparent)}
+.tag b{font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.chev{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.row.is-open .chev{transform:rotate(180deg);stroke:var(--ink)}
+.row-open:hover .row-name{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+
+/* ---------- panoul de sub rând ---------- */
+.panel{background:var(--surface-2);padding:2px 14px 16px 50px;display:grid;gap:12px}
+.p-note{margin:0;font-size:.92rem;color:var(--ink-2);max-width:68ch}
+.opts{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.opt{
+  min-width:0;display:flex;flex-direction:column;gap:6px;padding:12px 13px;
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+}
+.opt[data-tier="buget"]{--tc:var(--t-buget)}
+.opt[data-tier="mediu"]{--tc:var(--t-mediu)}
+.opt[data-tier="premium"]{--tc:var(--t-premium)}
+.opt.is-picked{border-color:var(--tc);box-shadow:0 0 0 1px var(--tc)}
+.opt-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.opt-tier{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tc)}
+.opt-shop{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right}
+.opt-name{margin:0;font-weight:600;font-size:.95rem;line-height:1.3;overflow-wrap:anywhere}
+.opt-price{margin:0;font-family:var(--f-mono);font-weight:600;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.opt-price .u{font-size:.72rem;color:var(--muted);font-weight:500}
+.opt-qty{font-family:var(--f-body);font-size:.74rem;font-weight:600;color:var(--tc);margin-left:6px}
+.opt-desc{margin:0;font-size:.86rem;color:var(--ink-2);flex:1}
+.opt-act{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--line-2)}
+.pick{
+  border:1px solid var(--line);background:transparent;border-radius:99px;padding:6px 14px;
+  font-size:.85rem;font-weight:600;color:var(--ink-2);cursor:pointer;
+}
+.pick:hover{border-color:var(--tc);color:var(--ink)}
+.pick[aria-pressed="true"]{background:var(--tc);border-color:var(--tc);color:var(--bg)}
+.go{font-size:.85rem;font-weight:600;text-decoration:none;color:var(--accent-ink);white-space:nowrap}
+.go:hover{text-decoration:underline}
+.go-n{font-size:.76rem;color:var(--muted)}
+.opt--none{justify-content:center;background:transparent;border-style:dashed}
+.opt--none p{margin:0;font-size:.84rem;color:var(--muted)}
+.parts{list-style:none;margin:0;padding:0;display:grid;font-size:.84rem}
+.parts li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line-2)}
+.parts li:last-child{border-bottom:0}
+.parts a{text-decoration:none;font-weight:600;min-width:0;overflow-wrap:anywhere}
+.parts a:hover{text-decoration:underline}
+.parts span{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* anunțuri și second-hand */
+.sub-h{margin:0;font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ads{display:grid;gap:8px}
+.ads-list{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.ad{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:10px 13px}
+.ad + .ad{border-top:1px solid var(--line-2)}
+.ad-name{font-weight:600;font-size:.92rem;text-decoration:none;min-width:0;overflow-wrap:anywhere}
+.ad-name:hover{text-decoration:underline}
+.ad-src{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:6px}
+.ad-price{font-family:var(--f-mono);font-weight:600;font-size:.86rem;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.ad-meta,.ad-note{grid-column:1 / -1;margin:0;font-size:.82rem;color:var(--muted)}
+.ad-note{color:var(--ink-2)}
+.ad--top{background:color-mix(in srgb, var(--accent) 10%, transparent)}
+.ads-foot{margin:0;font-size:.8rem;color:var(--muted)}
+
+.sh{border-top:1px solid var(--line);padding-top:12px}
+.sh>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.9rem;color:var(--ink-2)}
+.sh>summary::-webkit-details-marker{display:none}
+.sh>summary::after{content:"\25BE";color:var(--muted);font-size:.8rem}
+.sh[open]>summary::after{content:"\25B4"}
+.sh-sum b{font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.verdict{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid currentColor}
+.v-yes{color:var(--accent-ink)} .v-care{color:var(--warn)} .v-no{color:var(--miss)}
+.where{display:inline-flex;gap:5px;flex-wrap:wrap}
+.where span{font-size:.72rem;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+.brands{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.brand{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:3px 14px;padding:10px 13px;align-items:baseline}
+.brand + .brand{border-top:1px solid var(--line-2)}
+.b-name{font-weight:600;font-size:.92rem;min-width:0}
+.b-name small{font-weight:400;color:var(--muted);font-size:.74rem;margin-left:6px;letter-spacing:.04em}
+.brand.t-prem .b-name{color:var(--t-premium)}
+.brand.t-val .b-name{color:var(--t-buget)}
+.b-price{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.b-price b{color:var(--ink);font-weight:600}
+.b-what{grid-column:1 / -1;margin:0;font-size:.84rem;color:var(--ink-2)}
+.sh-check{margin:12px 0 0;font-size:.86rem;color:var(--ink-2);padding-left:12px;border-left:2px solid var(--line)}
+.sh-note{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;font-size:.88rem;color:var(--ink-2);border-top:1px solid var(--line);padding-top:12px}
+
+.mynote{display:grid;gap:6px}
+.mynote label{font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mynote input{
+  width:100%;font:inherit;font-size:max(16px, .95rem);color:var(--ink);background:var(--surface);
+  border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+}
+.mynote input::placeholder{color:var(--muted)}
+
+/* ---------- greutate și vreme ---------- */
+.info{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.info>summary{
+  cursor:pointer;list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:3px 12px;padding:12px 16px;
+}
+.info>summary::-webkit-details-marker{display:none}
+.info>summary::after{content:"\25BE";grid-column:2;grid-row:1;color:var(--muted);font-size:.85rem}
+.info[open]>summary::after{content:"\25B4"}
+.info-t{font-weight:700;font-size:1rem}
+.info-s{grid-column:1 / -1;font-size:.86rem;color:var(--muted)}
+.info-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;padding:4px 16px 16px;border-top:1px solid var(--line-2)}
+.info-col{min-width:0;display:grid;gap:10px;align-content:start;padding-top:12px}
+.info-col h3{margin:0;font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.kv{margin:0;display:grid;gap:0}
+.kv div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:6px 0;border-bottom:1px solid var(--line-2)}
+.kv div:last-child{border-bottom:0}
+.kv dt{color:var(--muted);font-size:.9rem}
+.kv dd{margin:0;text-align:right;font-size:.9rem}
+.kv b,.wx-row b{font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.wx{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.wx-st{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;display:grid;gap:4px}
+.wx-st p{margin:0}
+.wx-name{font-weight:600;font-size:.92rem}
+.wx-name span{display:block;font-weight:400;font-size:.78rem;color:var(--muted)}
+.wx-row{display:flex;justify-content:space-between;gap:8px;font-size:.86rem;color:var(--muted)}
+.wx-row b{color:var(--ink)}
+.wx-row b.cold{color:var(--t-mediu)}
+.info-note{margin:0;font-size:.84rem;color:var(--ink-2)}
+
+/* ---------- note de final ---------- */
+.notes{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px}
+.notes>summary{cursor:pointer;font-weight:600}
+.notes ul{margin:12px 0 0;padding-left:18px;display:grid;gap:8px;font-size:.9rem;color:var(--ink-2)}
+.notes li{max-width:72ch}
+
+@media (max-width:720px){
+  .opts{grid-template-columns:minmax(0,1fr)}
+  .info-body{grid-template-columns:minmax(0,1fr)}
+  .kv div{display:grid;gap:1px}
+  .kv dd{text-align:left}
+  .panel{padding:4px 14px 16px 14px}
+  .row-main{padding:10px 10px 10px 4px}
+  .big{font-size:2.5rem}
+  .tab{padding:9px 4px;font-size:.92rem}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none!important}
+}
+</style>
+
+<div class="app">
+  <header class="top">
+    <p class="eyebrow">XCC · 7–10 noiembrie 2026 · Maramureș</p>
+    <h1>Echipament</h1>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Liste">
+    <button type="button" class="tab" role="tab" id="tab-mine" data-tab="mine" aria-selected="true" aria-controls="list">Al meu <span class="tab-n" id="tn-mine"></span></button>
+    <button type="button" class="tab" role="tab" id="tab-team" data-tab="team" aria-selected="false" aria-controls="list">De echipă <span class="tab-n" id="tn-team"></span></button>
+    <button type="button" class="tab" role="tab" id="tab-opt" data-tab="opt" aria-selected="false" aria-controls="list">Opțional <span class="tab-n" id="tn-opt"></span></button>
+  </nav>
+
+  <section class="sum" aria-label="Sumar">
+    <div class="sum-head"><span class="big" id="s-big">0</span><span class="sum-txt" id="s-txt"></span></div>
+    <div class="bar" aria-hidden="true"><span id="s-bar" style="width:0%"></span></div>
+    <p class="cost" id="s-cost"></p>
+    <p class="mine" id="s-mine" hidden></p>
+    <div class="sum-foot">
+      <p class="hint">Apasă pe un rând ca să vezi variantele chiar sub el. Bifează ce ai deja.</p>
+      <button type="button" class="pill" id="only" aria-pressed="false">Doar ce-mi lipsește</button>
+    </div>
+    <div class="acct">
+      <p class="sync" id="sync" data-s="local">Salvat în acest browser</p>
+      <form class="login" id="login" hidden>
+        <label class="sr" for="em">Adresa de email</label>
+        <input id="em" type="email" inputmode="email" autocomplete="email" placeholder="adresa ta de email" required>
+        <button type="submit" class="btn" id="send">Trimite link de intrare</button>
+      </form>
+      <button type="button" class="linkbtn" id="logout" hidden>Ieși din cont</button>
+    </div>
+  </section>
+
+  <details class="info" id="info">
+    <summary><span class="info-t">Greutate și vreme</span><span class="info-s">15 kg + 2 L apă · Maramureș în noiembrie, între −3 și 9&nbsp;°C</span></summary>
+    <div class="info-body">
+      <section class="info-col" aria-labelledby="info-kg">
+        <h3 id="info-kg">Greutate</h3>
+        <dl class="kv">
+          <div><dt>Greutate maximă</dt><dd><b>15 kg</b> + 2 L de apă</dd></div>
+          <div><dt>La plecare primești</dt><dd>încă <b>~5 kg</b> de echipament și mâncare</dd></div>
+          <div><dt>De cărat efectiv</dt><dd><b>~20 kg</b>, pe distanțe lungi</dd></div>
+          <div><dt>Totul pe spate</dt><dd>ce nu intră în rucsac se prinde pe exterior</dd></div>
+        </dl>
+        <p class="info-note">Încearcă întâi să împrumuți de la prieteni, colegii de echipă sau organizatori. Nu cumpăra ce nu vei mai folosi.</p>
+      </section>
+      <section class="info-col" aria-labelledby="info-wx">
+        <h3 id="info-wx">Vremea în noiembrie</h3>
+        <div class="wx">
+          <div class="wx-st">
+            <p class="wx-name">Ocna Șugatag <span>în depresiune</span></p>
+            <p class="wx-row"><span>max. medie</span><b>8,7 °C</b></p>
+            <p class="wx-row"><span>min. medie</span><b>1,0 °C</b></p>
+            <p class="wx-row"><span>record</span><b class="cold">−13,9 °C</b></p>
+          </div>
+          <div class="wx-st">
+            <p class="wx-name">Iezer <span>1.785 m, Munții Rodnei</span></p>
+            <p class="wx-row"><span>max. medie</span><b>3,1 °C</b></p>
+            <p class="wx-row"><span>min. medie</span><b class="cold">−2,9 °C</b></p>
+            <p class="wx-row"><span>record</span><b class="cold">−21 °C</b></p>
+          </div>
+        </div>
+        <p class="info-note">La Iezer ninge cam 10 zile pe lună. Sacul de dormit, salteaua, polarul și mănușile din listă sunt alese pentru temperaturile astea. Surse: normalele 1991–2020 (Ocna Șugatag) și 2014–2026 (Iezer).</p>
+      </section>
+    </div>
+  </details>
+
+  <main id="list" role="tabpanel" aria-labelledby="tab-mine"></main>
+
+  <details class="notes">
+    <summary>Note și surse</summary>
+    <ul id="notes"></ul>
+  </details>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<script>
+(function(){
+"use strict";
+
+var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-p-" + id; };
+  var E = function(path){ return "https://www.emag.ro" + path; };
+  var DATA = [
+  { id:"personal", title:"Echipament personal", kind:"req", items:[
+    { id:"rucsac", name:"Rucsac de drumeție (min. 50 L)", note:"Cu prindere în zona bazinului — pui greutatea pe șolduri, nu pe umeri.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"SIMOND Rucsac Trekking MT100 50 L", price:229.99, url:D("rucsac-trekking-50","6561"), desc:"Cel mai ieftin rucsac serios de 50 L. Centură de bazin simplă, fără husă de ploaie."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND MT100 Easyfit 50 L", price:349.99, url:D("rucsac-trekking-mt100-easyfit-50l-negru-barbati","309807"), desc:"Spate reglabil pe lungimea taliei, centură lată, husă de ploaie inclusă. Varianta corectă pentru 20 kg."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND MT900 Symbium 50+10 L", price:699.99, url:D("rucsac-trekking-cu-husa-ploaie-mt900-symbium-50-10l-kaki-barbati","342061"), desc:"Extensibil la 60 L, transfer foarte bun al greutății pe șolduri, husă inclusă."}
+    ]},
+    { id:"frontala", name:"Frontală", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Onnight 100 — 80 lm", price:44.99, url:D("lanterna-frontala-trekking-onnight-100-80-lumeni","128225"), desc:"Merge pe baterii AAA (incluse) — nu depinde de powerbank. 80 lumeni ajung în tabără."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND UL500 USB-C — 150 lm", price:99.99, url:D("lanterna-frontala-reincarcabila-150-lumeni-ul500-usb-c","344319"), desc:"Reîncărcabilă USB-C, 150 lumeni. Ai nevoie de powerbank pentru mai multe nopți."},
+      {tier:"premium", shop:"Decathlon", name:"PETZL Swift LT — 380 lm", price:229.99, url:D("frontala-petzl-swift-lt-380-lm","383830"), desc:"380 lumeni. Diferența se simte când mergi pe teren accidentat noaptea."}
+    ]},
+    { id:"baterii", name:"Baterii de rezervă sau powerbank", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Baterii alcaline Duracell AAA, 4 buc.", price:10.89, url:E("/baterii-alcaline-duracell-aaak4-lr03-4-buc-5000394077164/pd/D35KQ3BBM/"), desc:"Pentru frontala pe baterii. Un set de rezervă cântărește ~45 g."},
+      {tier:"mediu", shop:"eMAG", name:"Powerbank Joyroom 10 000 mAh", price:59.99, url:E("/powerbank-joyroom-jr-pbf12-10000mah-2-4a-2x-usb-a-1x-usb-c-negru-kxg0123131/pd/DBGFDZYBM/"), desc:"~200 g. Acoperă frontala plus telefonul de urgență al echipei."},
+      {tier:"premium", shop:"eMAG", name:"Anker Zolo 20 000 mAh, 45 W", price:189.99, url:E("/acumulator-extern-anker-zolo-20-000-mah-45w-2-cabluri-usb-c-incorporate-negru-a1681h12/pd/D78ZMW3BM/"), desc:"Cabluri integrate, nu uiți nimic. Mai greu (~400 g), dar sigur pe tot XCC-ul."}
+    ]},
+    { id:"igiena", name:"Produse de igienă de bază", note:"Doar strictul necesar: periuță, pastă mică, hârtie, șervețele umede.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"FORCLAZ Trusă toaletă trekking UltraLight", price:49.99, url:D("trusa-toaleta-trekking-ultralight","173360"), desc:"~50 g, se agață și se strânge mic. Trusa goală — produsele le pui tu."},
+      {tier:"mediu", shop:"Decathlon", name:"FORCLAZ Trusă de toaletă Travel", price:59.99, url:D("trusa-de-toaleta-de-voiaj-travel-gri","303528"), desc:"Mai multe compartimente și cârlig de agățare. Puțin mai grea."}
+    ]},
+    { id:"biblie", name:"Biblie", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Noul Testament cu Psalmii, format mic", price:47, url:E("/noul-testament-cu-psalmii-format-mic-grena-2018-editura-institutului-biblic-si-de-misiune-ortodoxa-cns303/pd/D0TCYBMBM/"), desc:"Cea mai ușoară variantă tipărită, ~200 g. Verifică dacă organizatorii cer Biblia completă."},
+      {tier:"mediu", shop:"eMAG", name:"Biblia mică, copertă vișinie-aurie", price:111, url:E("/biblia-mica-visinie-aurie-ibm973-616-094-7/pd/EKJ550BBM/"), desc:"Biblie completă în format mic, copertă flexibilă. Rezistă la rucsac."}
+    ]},
+    { id:"folie", name:"Folie sau sac de supraviețuire", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"Folie de supraviețuire, unică folosință", price:11.99, url:D("folie-de-supravietuire","12837"), desc:"~60 g și 12 lei. Bifează cerința din listă și nu o simți în rucsac."},
+      {tier:"mediu", shop:"Decathlon", name:"Folie de supraviețuire reutilizabilă", price:34.99, url:D("folie-de-supravietuire-reutilizabila","312111"), desc:"Se strânge înapoi și rezistă la mai multe deschideri, nu se rupe din prima."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Sac de supraviețuire alpinism", price:44.99, url:D("sac-supravietuire-alpinism","145795"), desc:"Sac întreg, nu doar folie — intri în el. Adăpost real la vânt și ploaie."}
+    ]},
+    { id:"lopatica", name:"Lopățică (pentru îngropat fecale)", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Mini-lopată pliabilă multifuncțională, 41 cm", price:22.49, url:E("/mini-lopata-pliabila-multifunctionala-41-cm-lopata-mica-981/pd/DMW6T4MBM/"), desc:"Cea mai ieftină. Grea pentru ce face — vreo 600 g de metal."},
+      {tier:"mediu", shop:"Decathlon", name:"SEA TO SUMMIT Pocket Trowel", price:59.49, url:"https://www.decathlon.ro/p/mp/sea-to-summit/lopata-pliabila-camping-pocket-trowel/_/R-p-31bd85b1-a0d6-48c7-a8c5-a8dd72ef097d", desc:"Aluminiu, ~30 g. Exact pentru ce e cerută în listă și nu o simți deloc."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA Cazma / lopată pliabilă camping", price:74.99, url:D("cazma-lopata-pliabila-camping","302835"), desc:"Lopată adevărată cu mâner. Folosește și la cort sau la foc, dar cântărește."}
+    ]},
+    { id:"crema", name:"Cremă protecție UV", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"Spray protecție solară ACTIVE, 150 ml, SPF 30", price:37.99, url:D("spray-protectie-solara-active-150-ml-fps30","347034"), desc:"Cel mai bun preț pe mililitru, dar 150 ml e mult de cărat pentru câteva zile."},
+      {tier:"mediu", shop:"Decathlon", name:"Spray protecție solară sport, 50 ml, SPF 50+", price:39.99, url:D("spray-protectie-solara-sport-spf-50-50-ml","351945"), desc:"50 ml SPF 50+. Formatul corect pentru rucsac și protecția potrivită pentru creastă."},
+      {tier:"premium", shop:"Decathlon", name:"Stick protecție solară față Sport, 25 g, SPF 50", price:44.99, url:D("stick-protectie-solara-pentru-fata-sport-spf-50-25-g","362016"), desc:"Nu curge și nu intră în ochi când transpiri. 25 g, se aplică din mers."}
+    ]}
+  ]},
+
+  { id:"imbracaminte", title:"Îmbrăcăminte", kind:"req", items:[
+    { id:"jacheta", name:"Jachetă rezistentă la ploaie", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Raincut, fermoar integral", price:57.99, url:D("geaca-impermeabila-raincut-barbati","350837"), desc:"Ține ploaia, dar nu respiră — transpiri la urcare. Se strânge foarte mic."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA NH500 impermeabilă", price:139.99, url:D("geaca-impermeabila-drumetie-nh500-barbati","334354"), desc:"Impermeabilă și respirantă, glugă ajustabilă. Raportul corect calitate/preț."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA MH500 impermeabilă și respirantă", price:429.99, url:D("geaca-impermeabila-drumetie-mh500-barbati","357657"), desc:"Membrană de munte, cusături lipite, glugă compatibilă cu rucsacul. Rezistă la ore de ploaie."}
+    ]},
+    { id:"pantaloni-ploaie", name:"Pantaloni rezistenți la ploaie", note:"Se poartă peste pantalonii normali.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Suprapantalon NH500", price:79.99, url:D("suprapantalon-impermeabil-drumetie-in-natura-nh500-barbati","345947"), desc:"Ușori, se strâng mic. Trebuie să scoți ghetele ca să-i pui."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Suprapantalon MH500", price:199.99, url:D("suprapantalon-impermeabil-drumetie-la-munte-mh500-negru-barbati","307241"), desc:"Fermoare laterale — îi pui peste ghete, în ploaie, fără să te descalți."},
+      {tier:"premium", shop:"Decathlon", name:"FORCLAZ Suprapantalon 20 000 mm, cusături lipite", price:399.99, url:D("suprapantalon-impermeabil-trekking-barbati","192293"), desc:"Pentru ploaie continuă mai multe zile. Nu cedează la genunchi și șezut."}
+    ]},
+    { id:"polar", name:"Polar cu mânecă lungă", note:"În noiembrie, polarul e stratul tău cald: lista nu permite o geacă de puf în plus. De aici în sus contează.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA MH100 cu fermoar", price:44.99, url:D("polar-drumetie-la-munte-mh100-barbati","333884"), desc:"Polar subțire. Singur e prea puțin pentru noiembrie — merge doar peste o bluză de corp din merinos, cu buff și căciulă."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA MH500 Light", price:119.99, url:D("polar-drumetie-la-munte-light-barbati","336416"), desc:"Tricotaj grid: mai cald la aceeași greutate și se usucă repede. Minimul rezonabil pentru Maramureș în noiembrie."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA MH900 călduros", price:249.99, url:D("polar-calduros-drumetie-barbati","332161"), desc:"Polar gros. Alegerea corectă pentru serile și diminețile de noiembrie, când stai pe loc în tabără."}
+    ]},
+    { id:"bluza-corp", name:"Bluză de corp (prim strat)", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"WEDZE Bluză termică BL100", price:34.99, url:D("bluza-termica-schi-100-clasic-alb-barbati","302821"), desc:"Sintetic, ieftin, se usucă repede. Miroase după două zile de purtat."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND Merino Fresh Techwool 155", price:99.99, url:D("bluza-drumetii-techwool-155-gri-barbati","4523"), desc:"Lână merinos 155 g/m² — nu miroase după mai multe zile. Cea mai bună alegere pentru XCC."},
+      {tier:"premium", shop:"Decathlon", name:"FORCLAZ Merino Rec Fresh", price:149.99, url:D("bluza-cu-lana-merinos-40-percent-reciclata-merino-rec-fresh-barbati","356476"), desc:"Merinos mai gros și mai durabil, cusături plate pe umeri — contează sub bretelele rucsacului."}
+    ]},
+    { id:"pantaloni-corp", name:"Pantaloni de corp", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"WEDZE Colanți termici BL100", price:34.99, url:D("colanti-termici-pentru-schi-bl-100-negru-barbati","302822"), desc:"Subțiri, sintetici. Bun pentru dormit și dimineți reci."},
+      {tier:"mediu", shop:"Decathlon", name:"WEDZE Pantaloni termici de corp BL500", price:69.99, url:D("pantaloni-termici-de-corp-de-schi-bl-500-negru-barbati","340509"), desc:"Mai groși, croială mai bună. Se pot purta toată ziua sub pantaloni."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA Colanți merinos BL900, fără cusături", price:249.99, url:D("colanti-termici-din-lana-merinos-fara-cusaturi-bl900-negru-barbati","366011"), desc:"Merinos fără cusături: zero frecare pe zile lungi, nu miroase."}
+    ]},
+    { id:"lenjerie", name:"Lenjerie (mai multe schimburi)", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"Set 2 boxeri scurți", price:64.99, url:D("set-de-2-boxeri-scurti-negru-barbati","377836"), desc:"Două perechi. Bumbac-mix, se usucă lent — ia în calcul un al treilea schimb."},
+      {tier:"mediu", shop:"Decathlon", name:"Set 3 boxeri respiranți din microfibră", price:79.99, url:D("set-3-perechi-boxeri-respiranti-microfibra-barbati","351469"), desc:"Se spală seara, se usucă până dimineață. Cel mai practic pentru mai multe zile."},
+      {tier:"premium", shop:"Decathlon", name:"REEBOK Set 4 boxeri din bumbac", price:149.99, url:D("set-de-4-boxeri-din-bumbac-negru-barbati","381788"), desc:"Patru perechi — un schimb pe zi, fără spălat pe traseu."}
+    ]},
+    { id:"buff", name:"Buff (guler tubular)", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"SOLOGNAC Guler 100 călduros", price:19.99, url:D("guler-100-calduros-verde","144496"), desc:"Polar tubular, ~40 g. Ține și de căciulă la nevoie."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Guler de drumeție HIKE 100", price:24.99, url:D("guler-de-drumetie-hike-100","330154"), desc:"Tub subțire, respirant. Bun și ca protecție solară pe ceafă."},
+      {tier:"premium", shop:"Decathlon", name:"CAPERLAN Guler 500 anti-UV", price:39.99, url:D("guler-de-pescuit-500-anti-uv-albastru-deschis","328846"), desc:"Protecție UV, material foarte respirant. Pentru soare puternic pe creastă."}
+    ]},
+    { id:"caciula", name:"Căciulă", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"WEDZE Căciulă Firstheat", price:14.99, url:D("caciula-schi-firstheat-negru-adulti","165131"), desc:"Polar subțire, ~30 g. Intră în buzunarul pantalonilor."},
+      {tier:"mediu", shop:"Decathlon", name:"WEDZE Căciulă SIMPLĂ 100", price:24.99, url:D("caciula-simpla-tricolor-maro-adulti","355220"), desc:"Tricotată dublu strat, mai caldă pentru nopți."},
+      {tier:"premium", shop:"Decathlon", name:"KIPRUN Căciulă fără cusături", price:29.99, url:D("caciula-de-alergare-fara-cusaturi-kiprun-gri-adulti","157211"), desc:"Foarte ușoară, se usucă repede — nu rămâne udă de transpirație."}
+    ]},
+    { id:"manusi", name:"Mănuși", note:"În noiembrie trebuie să fie impermeabile. Cel mai bun sistem: mănuși subțiri de polar dedesubt (QUECHUA MT500, 40 lei) + un strat impermeabil peste.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"WEDZE Mănuși schi 100", price:49.99, url:D("manusi-schi-100-adulti","310563"), desc:"Membrană impermeabilă, vatelină 150 g/m². Mai groase decât mănușile de trekking, dar calde și uscate la 50 de lei."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND Mănuși strat 2 impermeabile MT500", price:99.99, url:D("manusi-strat-2-impermeabile-mt500-negru-adulti","346716"), desc:"Membrană 10.000 mm, cusături lipite, 46 g. Se pun peste mănușile de polar — sistemul corect pentru ploaie rece."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Mănuși de alpinism impermeabile Sprint III", price:179.99, url:D("manusi-de-alpinism-impermeabile-sprint-iii","375691"), desc:"Mănuși de alpinism impermeabile, izolate. Cele mai calde și rezistente din gama de trekking Decathlon."}
+    ]},
+    { id:"sosete", name:"Șosete groase de merinos", note:"Merinosul ține de cald și când e ud și nu miroase după trei zile. Două perechi de mers, pe care le alternezi, plus una uscată doar pentru sacul de dormit. Mărimea după numărul de la bocanci. Fără bumbac.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA SH900 merinos, set 2 perechi", price:109.99, url:D("set-2-perechi-sosete-calduroase-mid-drumetie-mh900","336930"), desc:"88% lână merinos, talpa tricotată integral din merinos, interior plușat. Înalte peste gleznă, gândite pentru drumeții iarna. 55 lei perechea, nota 4,6 din 713 recenzii. Cel mai mult merinos pe leu din tot ce am găsit."},
+      {tier:"mediu", shop:"4camping", name:"Smartwool Hike Classic Edition Full Cushion Crew", price:124, qty:2, url:"https://www.4camping.ro/p/sosete-smartwool-hike-classic-edi-full-cushion-crew-socks/", desc:"66% merinos, pernă groasă pe toată talpa (full cushion), înălțime crew. Clasicul pentru bocanci. 124 lei perechea (de la 144), 112 cu codul de reducere afișat pe site. Mărimi: L = 42–45, XL = 46–49."},
+      {tier:"premium", shop:"4camping", name:"Darn Tough Hiker Boot Midweight Full Cushion", price:216, qty:2, url:"https://www.4camping.ro/p/sosete-barbati-darn-tough-hiker-boot-midweight-with-full-cushion/", desc:"66% merinos, tricot foarte dens, peste gleznă. Cele mai rezistente șosete de drumeție, iar producătorul le înlocuiește pe viață dacă se rup. 216 lei perechea (194 cu codul de pe site); pe eMAG aceleași costă 480–565."}
+    ], adsDate:"16 oct", adsFoot:"OLX are foarte puțin: doar cele două anunțuri de mai sus sunt șosete de drumeție noi. X-Socks Silk Merino (Cluj, 130 lei) sunt subțiri, până la genunchi și mărimea 39–41, nu pentru bocanci.", ads:[
+      {src:"Vinted", top:1, name:"Minus33, groase, full cushion", price:"49 lei / pereche", meta:"75% merinos · mărimi 31–47 · nou fără etichetă · 54,95 cu taxa Vinted, plus livrare", note:"Cea mai bună găsire: exact șoseta groasă de bocanci, cu pernă pe toată talpa. Vânzătorul are mai multe culori și mărimi, deci poți lua două perechi într-un singur colet.", url:"https://www.vinted.ro/items/10287991744-sosete-merinos-minus33"},
+      {src:"Vinted", name:"Danish Endurance, set 3 perechi", price:"100 lei / set", meta:"≈33 lei perechea · 43–47 · nou fără etichetă · 108,50 cu taxa Vinted", note:"Cel mai ieftin merinos pe pereche. Compoziția nu e scrisă: întreabă cât merinos au și dacă au pernă pe talpă.", url:"https://www.vinted.ro/items/10376523643-vand-set-sosete-lana-merino-43-47"},
+      {src:"Vinted", name:"Aclima HotWool, colecția Lars Monsen", price:"135 lei", meta:"70% merinos · 44–48 · nou cu etichetă · 145,25 cu taxa Vinted", note:"Norvegiene, foarte groase, făcute pentru frig. Merită doar dacă porți 44 sau mai mult.", url:"https://www.vinted.ro/items/9424756388-sosete-merino-aclima-hotwool-colectia-lars-monsen"},
+      {src:"Vinted", name:"Darn Tough Hike/Trek Micro Crew Midweight", price:"135,87 lei", meta:"vânzător din Polonia · nou cu etichetă, ambalaj deteriorat · 146,16 cu taxa, livrare de la 19,89", note:"Mărimea e trecută „de confirmat pe etichetă”, iar categoria e 38–42: cere o poză cu eticheta înainte. Micro Crew e mai joasă decât Hiker Boot.", url:"https://www.vinted.ro/items/10390832745-darn-tough-hiketrek-micro-crew-midweight-skarpety-trekkingowe-z-merino"},
+      {src:"Vinted", name:"Smartwool cu model, crew", price:"50 lei", meta:"42–46 · nou fără etichetă, neprobate · 56 cu taxa Vinted", note:"Model de oraș, fără pernă pe talpă. Nu e pentru mers cu bocancii, dar e bun ca pereche uscată pentru sacul de dormit.", url:"https://www.vinted.ro/items/10391221416-smartwool-merino-gyapju-zokni"},
+      {src:"OLX", name:"Juclise, set 3 perechi · Florești, CJ", price:"109 lei, negociabil", meta:"62% merinos, 35% Coolmax · EU 47–51 · nou, sigilat, din stoc de lichidare", note:"Compoziție bună și 36 lei perechea, dar mărimea e foarte mare: doar dacă porți 47+.", url:"https://www.olx.ro/d/oferta/sosete-drumetie-barbati-juclise-lana-merinos-compresie-denim-eu47-51-IDkXcqR.html"},
+      {src:"OLX", name:"Fără marcă, drumeție · Bistrița", price:"80 lei", meta:"mărimea 42 la bărbați · nou cu etichetă", note:"Anunțul zice 80 lei, descrierea „100 lei setul de 3 perechi”, iar compoziția lipsește. Întreabă prețul exact și cât merinos au.", url:"https://www.olx.ro/d/oferta/sosete-lana-drumetie-sport-merino-IDkNyDT.html"}
+    ]},
+    { id:"pantaloni-scurti", name:"Pantaloni scurți (care pot fi murdăriți și udați)", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Pantalon scurt NH100", price:49.99, url:D("pantalon-scurt-drumetie-nh100-barbati","347182"), desc:"Bumbac-mix, ieftin. Exact pentru „poate fi murdărit”."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Pantalon scurt MH100", price:64.99, url:D("pantalon-scurt-drumetie-la-munte-mh100-barbati","341568"), desc:"Material sintetic care se usucă rapid după probe cu apă."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA Pantalon scurt NH500 Regular", price:89.99, url:D("pantalon-scurt-regular-barbati","332726"), desc:"Talie elastică, buzunare cu fermoar, țesătură mai rezistentă la agățat."}
+    ]},
+    { id:"tricou", name:"Tricou (care poate fi murdărit și udat)", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Tricou MH100", price:29.99, url:D("tricou-drumetie-la-munte-mh100-gri-barbati","106632"), desc:"30 lei. Îl arunci fără regrete după XCC."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Tricou NH100", price:39.99, url:D("tricou-nh100-barbati","349961"), desc:"Se usucă mai repede, croială mai bună sub rucsac."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA Tricou MH500", price:74.99, url:D("tricou-drumetie-la-munte-mh500-barbati","341235"), desc:"Sintetic tehnic, tratament anti-miros. Rezistă mai multe zile."}
+    ]},
+    { id:"incaltaminte-sport", name:"Încălțăminte sport (care poate fi murdărită și udată)", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"DECATHLON Run Ekiden", price:64.99, url:D("incaltaminte-alergare-run-barbati","9713"), desc:"65 lei. Exact ce cere lista: pantofi pe care nu îți pare rău să-i uzi."},
+      {tier:"mediu", shop:"Decathlon", name:"DECATHLON Jogflow 100.1", price:99.99, url:D("incaltaminte-alergare-jogging-jogflow-100-1-barbati","337693"), desc:"Amortizare decentă. Bun și ca schimb de seară, când scoți ghetele."},
+      {tier:"premium", shop:"Decathlon", name:"DECATHLON JF 190 Grip (traseu)", price:179.99, url:D("incaltaminte-alergare-traseu-jf-190-grip-barbati","348850"), desc:"Talpă cu crampoane pentru pământ moale — utili dacă sunt probe de alergare pe teren."}
+    ]}
+  ]},
+
+  { id:"gatit", title:"Echipamente pentru gătit / luat masa", kind:"req", items:[
+    { id:"tacamuri", name:"Cuțit / furculiță / lingură", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Set 3 tacâmuri, plastic", price:9.99, url:D("set-3-tacamuri-drumetie-cutit-furculita-lingura-plastic-rosu","171676"), desc:"~25 g și 10 lei. Se rup dacă forțezi, dar fac treaba."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Set 3 tacâmuri inox + cutie", price:34.99, url:D("set-3-tacamuri-de-inox-lingura-furculita-cutit-cutie-de-depozitare-drumetie","350672"), desc:"Inox cu cutie de transport. Nu se rup și nu se topesc în oala fierbinte."},
+      {tier:"premium", shop:"Decathlon", name:"LIGHT MY FIRE Spork Original 3-în-1", price:34.99, url:D("tacamuri-de-trekking-3-in-1-furculita-cutit-lingura-spork-original","384067"), desc:"Un singur obiect de ~10 g: furculiță, lingură și tăiș. Cel mai puțin de cărat."}
+    ]},
+    { id:"oala", name:"Oală 0,5–1 L", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Set gătit inox, 1 persoană, 6 elemente", price:49.99, url:D("set-de-gatit-pentru-camping-din-otel-inoxidabil-pentru-1-persoana-cu-6-elemente","372646"), desc:"Oală de ~0,9 L, capac, cană și tacâmuri, toate împachetate unul în altul."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Set gătit inox, 2 persoane, 10 elemente", price:74.99, url:D("set-de-gatit-camping-din-otel-inoxidabil-pentru-2-persoane-10-elemente","372628"), desc:"Două oale — util dacă gătiți în doi din echipă și împărțiți greutatea."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA Set gătit 500, inox + antiaderent", price:179.99, url:D("set-de-gatit-camping-inox-2-persoane","174678"), desc:"Interior antiaderent: se curăță cu foarte puțină apă. Contează când apa e pe rație."}
+    ]},
+    { id:"cana", name:"Cană", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Cană plastic 100, 0,20 L", price:9.99, url:D("cana-de-plastic-100-de-0-20-l-pentru-camping-si-bivuac","359800"), desc:"~30 g, 10 lei. Nu o pui pe foc."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Cană 500 inox, 0,4 L", price:24.99, url:D("cana-500-otel-inoxidabil-0-4l-pentru-drumetie-si-camping","174671"), desc:"Inox — poate sta direct pe arzător pentru un ceai. Volum generos."},
+      {tier:"premium", shop:"Decathlon", name:"QUECHUA Cană 500 inox, 0,3 L", price:29.99, url:D("cana-500-otel-inoxidabil-0-3l","359595"), desc:"Mai mică, cu mâner rabatabil — se strânge în oală și nu ocupă loc separat."}
+    ]},
+    { id:"apa", name:"2 litri de apă", note:"Cerință fixă: îi aduci cu tine, peste cele 15 kg.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Bidon aluminiu 1 L, deschidere rapidă", price:49.99, qty:2, url:D("bidon-din-aluminiu-cu-capac-cu-deschidere-rapida-drumetie-1-l-rosu","330041"), desc:"~120 g bucata. Iei două, sau unul plus o sticlă PET de 1,5 L."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Bidon inox 1 L, capac cu filet", price:59.99, qty:2, url:D("bidon-inox-100-cu-capac-cu-filet-drumetie-1l-bordo","351210"), desc:"Inox, nu dă gust, etanș — poate sta culcat în rucsac."},
+      {tier:"premium", shop:"Decathlon", name:"FORCLAZ Rezervor de apă MT500, 2 L", price:74.99, url:D("rezervor-apa-mt500-2l-albastru","306516"), desc:"Exact 2 L într-un singur obiect, cu tub de băut. Bei din mers, se pliază gol."}
+    ]},
+    { id:"prosop", name:"Prosop", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"Prosop microfibră S, 39×55 cm", price:14.99, url:D("prosop-microfibra-fata-dubla-albastru-verde-marimea-s-39-x-55-cm","341947"), desc:"Mic și foarte ușor. Ajunge pentru față și mâini."},
+      {tier:"mediu", shop:"Decathlon", name:"Prosop microfibră față dublă M, 60×80 cm", price:24.99, url:D("prosop-microfibra-fata-dubla-m-albastru-verde-60-x-80-cm","342041"), desc:"O față absorbantă, una de uscat. Mărimea corectă pentru corp întreg."},
+      {tier:"premium", shop:"Decathlon", name:"Prosop microfibră ultra compact M, 65×90 cm", price:24.99, url:D("prosop-microfibra-ultra-compact-m-65-x-90-cm-portocaliu","158324"), desc:"Același preț, se strânge la mărimea unui pumn. Mai puțin volum în rucsac."}
+    ]}
+  ]},
+
+  { id:"dormit", title:"Pentru dormit", kind:"req", items:[
+    { id:"sac-dormit", name:"Sac de dormit călduros", note:"Ambalat într-o pungă (cerut în listă). Pentru bărbați contează temperatura-limită, nu cea de confort (ISO 23537): ai nevoie de −5 °C sau mai jos.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Sac de dormit camping 0 °C Arpenaz", price:299.99, url:D("sac-de-dormit-de-camping-0degc-arpenaz","340423"), desc:"Confort 0 °C, limită −9 °C, dreptunghiular — încapi comod. Dar 2,2 kg și 29 L împachetat: se prinde pe exterior și mănâncă din cele 15 kg."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND Sac de dormit trekking 0 °C MT500", price:399.99, url:D("sac-de-dormit-de-trekking-0degc-mt500","346447"), desc:"Confort 0 °C, limită −5 °C, sintetic — izolează și când e umed. Ia mărimea XL (1,54 kg), e mai lată la umeri."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Sac de dormit 0 °C din puf MT900", price:899.99, url:D("sac-de-dormit-de-trekking-0degc-din-puf-usor-si-compact-mt900","355074"), desc:"Confort 0 °C, limită −5 °C, 930 g, 11 L. Cea mai mare economie de greutate, dar puful ud nu mai ține cald: ține-l în sac impermeabil."}
+    ]},
+    { id:"izopren", name:"Izopren sau saltea", note:"Pe sol înghețat ai nevoie de R ≥ 4. Valorile R se adună când pui două saltele una peste alta. Salteaua MT900 ușoară (R 1,5) din versiunea anterioară a listei e de vară — nu o lua.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"SIMOND Izopren pliabil MT500, 180×55 cm", price:94.99, url:D("izopren-pliabil-din-spuma-trekking-mt500-180-x-55-cm-1-persoana-gri","174619"), desc:"R 2,1, 370 g, spumă pliabilă, nu se sparge. Singur e la limită pentru noiembrie — dormi îmbrăcat."},
+      {tier:"mediu", shop:"Decathlon", name:"FORCLAZ Autogonflabilă MT100 L + izopren MT500", price:294.98, url:D("saltea-autogonflabila-trekking-l","124065"), desc:"Autogonflabila (R 2,7, 199,99 lei) pusă peste izoprenul MT500 (R 2,1, 94,99 lei) dă R ~4,8. Combinația clasică pentru sol înghețat."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Saltea gonflabilă izolantă MT900, L", price:699.99, url:D("saltea-gonflabila-trekking-mt900","324574"), desc:"R 5,4, 615 g, 9 cm, suportă 150 kg. Varianta XL (195×63 cm) costă 749,99 lei."}
+    ]}
+  ]},
+
+  { id:"echipa", title:"Echipamente de echipă", kind:"team", tag:"1 set / echipă", items:[
+    { id:"cort", name:"Corturi", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Cort camping automat 3–4 persoane, dublu strat", price:178.49, url:E("/cort-camping-automat-3-4-persoane-impermeabil-200-200-135cm-strat-dublu-impermeabil-rezistent-la-vant-si-cu-protectie-uv-potrivit-pentru-activitati-in-aer-liber-cum-ar-fi-drumetii-activitati-pe-plaja-/pd/D45V7M2BM/"), desc:"Ieftin și încăpător, dar greu și fragil la vânt puternic. Bun dacă nu urcați mult."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND Cort dom trekking MT500, 2 persoane", price:599.99, url:D("cort-structura-autoportanta-forma-de-dom-trekking-mt500-2-persoane","310893"), desc:"Autoportant, ~2,5 kg, făcut pentru trekking. Se împarte pe două rucsacuri."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Cort dom trekking MT900, 2 persoane", price:1199.99, url:D("cort-dom-trekking-mt900-2-persoane-gri","301558"), desc:"~2 kg, arceuri și pânză de altitudine. Cel mai bun raport greutate/rezistență."}
+    ]},
+    { id:"busola", name:"Busolă (cel puțin 1 / echipă)", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Busolă cu capac, plastic, compactă", price:12.10, url:E("/busola-cu-capac-plastic-compacta-ideala-pentru-drumetii-camping-supravietuire-6-x-4-8-x-1-5-cm-negru-dactylionr-dactylion-12702/pd/D47ZHK2BM/"), desc:"12 lei. Arată nordul, dar nu te baza pe ea pentru azimut precis."},
+      {tier:"mediu", shop:"eMAG", name:"Busolă Suunto A-10 NH", price:122, url:E("/busola-suunto-a-10-nh-compass-ss021237000/pd/DF8P3ZBBM/"), desc:"Busolă de placă adevărată, cu riglă. Cu ea poți lucra pe hartă — asta vă trebuie."},
+      {tier:"premium", shop:"eMAG", name:"Busolă Silva Field, 28 g", price:160.87, url:E("/busola-silva-field-85x54x11mm-28g-multicolor-21385/pd/DGQN4HYBM/"), desc:"Ac care se stabilizează rapid, riglă și lupă. Standardul pentru orientare."}
+    ]},
+    { id:"bricheta", name:"Brichetă (cel puțin 1 / echipă)", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Brichetă antivânt de buzunar", price:4.99, qty:2, url:E("/bricheta-antivant-de-buzunar-brfa00064-black-81-x-27-x-12-mm-flacara-reglabila-neagra-81-mm-brfa-00064-bk/pd/DXZ45NYBM/"), desc:"5 lei bucata. Ia două — una se udă întotdeauna."},
+      {tier:"mediu", shop:"eMAG", name:"Set 2 brichete turbo jet antivânt, reîncărcabile", price:79.86, url:E("/set-2-brichete-metalice-turbo-jet-antivant-reincarcabile-cu-gaz-argintie-ems-291-ems-1280/pd/DH02QQ3BM/"), desc:"Flacără jet, merge în vânt. Două bucăți, deci una de rezervă din start."},
+      {tier:"premium", shop:"eMAG", name:"Brichetă Zippo Brushed Chrome", price:107.85, url:E("/bricheta-zippo-brushed-chrome-zippo162/pd/DF6RW2BBM/"), desc:"Se aprinde în vânt, se reumple, și repornește după ce s-a uscat."}
+    ]},
+    { id:"fierastrau", name:"Fierăstrău de mână (1 buc. / echipă)", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Fierăstrău pliabil, lamă 18 cm", price:20.57, url:E("/fierastrau-pliabil-18-cm-pentru-lemn-placaj-gips-carton-si-tevi-pvc-lama-otel-calit-maner-ergonomic-antiderapant-fierastrau-manual-compact-fold-saw-18cm/pd/DR9XZM2BM/"), desc:"21 lei, pliabil. Taie lemn subțire pentru foc, încet."},
+      {tier:"mediu", shop:"eMAG", name:"Fierăstrău pliabil Autocise, lamă SK5 250 mm", price:49.36, url:E("/fierastrau-pliabil-autocise-lama-sk5-250mm-maner-antiderapant-alb-negru-autocise00040/pd/D3XGVVYBM/"), desc:"Lamă de 250 mm — taie de două ori mai repede la aceeași greutate."},
+      {tier:"premium", shop:"eMAG", name:"Fierăstrău Bahco PrizeCut, 300 mm", price:57, url:E("/fierastrau-bahco-prizecut-pentru-lemn-si-plastic-300-mm-np-12-com/pd/DYY7T7MBM/"), desc:"Bahco, lamă de 300 mm. Nu se pliază, dar taie cel mai bine."}
+    ]},
+    { id:"primus", name:"Primus (arzător), 2–3 / echipă", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"FORCLAZ Arzător gaz compact, piezo, MT100", price:99.99, url:D("arzator-pe-gaz-compact-cu-sistem-de-aprindere-piezo-mt100","324538"), desc:"~100 g, aprindere piezo. Se înșurubează direct pe cartuș."},
+      {tier:"mediu", shop:"Decathlon", name:"FORCLAZ Arzător gaz compact, piezo, MT500", price:189.99, url:D("arzator-pe-gaz-compact-sistem-de-aprindere-piezo-mt500","310238"), desc:"Mai stabil și cu randament mai bun pe vânt. Fierbe un litru vizibil mai repede."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Arzător ultra-ușor MT900", price:279.99, url:D("arzator-si-compact-mt900","342126"), desc:"Cel mai mic și ușor din gamă. Merită dacă îl cari tu tot XCC-ul."}
+    ]},
+    { id:"butelie", name:"Butelie (cartuș de gaz)", note:"Cartușele cu filet nu se pot transporta cu avionul.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"Cartuș gaz cu filet, 230 g", price:32.49, url:D("cartus-de-gaz-cu-filet-pentru-arzator-230g","310845"), desc:"230 g de gaz: cam 2–3 zile de gătit pentru două persoane."},
+      {tier:"mediu", shop:"Decathlon", name:"FORCLAZ Cartuș gaz cu filet, 450 g", price:49.99, url:D("cartus-de-gaz-cu-filet-pentru-arzator","310856"), desc:"Mai eficient pe leu, dar un singur punct de defect. Bun ca butelie principală de echipă."}
+    ]}
+  ]},
+
+  { id:"optional", title:"Opțional", kind:"opt", tag:"nu e obligatoriu", items:[
+    { id:"ochelari", name:"Ochelari de soare", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"Active 100, categoria 3", price:37.99, url:D("ochelari-de-soare-active-100-categoria-3","339362"), desc:"Categoria 3 e minimul pentru munte. 38 lei — nu îți pare rău dacă se pierd."},
+      {tier:"mediu", shop:"Decathlon", name:"MH530, categoria 3", price:119.99, url:D("ochelari-de-soare-drumetie-mh530-categoria-3-negru-portocaliu-adulti","324410"), desc:"Ramă de drumeție, stau pe nas la efort și au protecție laterală."},
+      {tier:"premium", shop:"Decathlon", name:"MH530 polarizați, categoria 3", price:139.99, url:D("ochelari-de-soare-sport-polarizati-categoria-3-mh-530","324349"), desc:"Polarizați: taie reflexia de pe apă, stâncă udă și zăpadă."}
+    ]},
+    { id:"poncho", name:"Poncho impermeabil", note:"", variants:[
+      {tier:"buget", shop:"Decathlon", name:"FORCLAZ Pelerină poncho 50/10 L", price:39.99, url:D("pelerina-poncho-ploaie-trekking-la-munte-forclaz-50-10l-gri","339021"), desc:"Acoperă și rucsacul de 50 L. Cea mai ieftină soluție „totul sub un acoperiș”."},
+      {tier:"mediu", shop:"Decathlon", name:"FORCLAZ Poncho ploaie MT100, 30 L", price:89.99, url:D("poncho-ploaie-forclaz-mt100-30l-albastru","307368"), desc:"Material mai rezistent și croială mai bună, dar doar pentru rucsacuri până la 30 L."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Poncho MT500, 60 L", price:109.99, url:D("pelerina-ploaie-tip-poncho-mt500-60l","324443"), desc:"Acoperă rucsacul plin. Ține și de adăpost improvizat la pauze."}
+    ]},
+    { id:"husa-rucsac", name:"Husă de ploaie pentru rucsac", note:"Dacă iei rucsacul MT100 Easyfit sau MT900, husa e deja inclusă.", variants:[
+      {tier:"buget", shop:"eMAG", name:"Husă de ploaie rucsac, L (45–55 L)", price:19.97, url:E("/husa-de-ploaie-pentru-rucsac-sinbinta-l-45-55l-banda-reflectorizanta-cu-geanta-de-depozitare-cu-fermoar-impermeabila-anti-praf-rezistent-la-uzura-usor-usor-de-utilizat-pentru-calatorii-calarie-alpinis/pd/DKH125YBM/"), desc:"20 lei pentru un rucsac de 45–55 L, cu bandă reflectorizantă."},
+      {tier:"mediu", shop:"eMAG", name:"Set 2 huse impermeabile, L (55–65 L)", price:26.74, url:E("/set-2-husa-impermeabila-pentru-rucsac-sinbinta-husa-de-ploaie-pentru-rucsac-l-55-65l-cu-banda-reflectorizanta-usor-de-utilizat-pentru-calatorii-calarie-alpinism-drumetii-poliester-oxford-negru-portoca/pd/DPN125YBM/"), desc:"Două bucăți — una de rezervă sau pentru un coechipier."}
+    ]},
+    { id:"bete", name:"Bețe de drumeție", note:"Decathlon le vinde individual — prețurile sunt pentru pereche (×2). Cu 20 kg pe spate și coborâri pe teren ud, le-aș trata ca obligatorii.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"FORCLAZ Băț drumeție MT100", price:29.99, qty:2, url:D("bat-drumetie-arpenaz-100-albastru","122861"), desc:"30 lei bucata, aluminiu, reglabil. Cea mai ieftină pereche funcțională."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Băț drumeție MH100 Confort", price:59.99, qty:2, url:D("bat-pentru-confortabil-mh100-confort","371542"), desc:"Mâner mai bun și blocare mai sigură — nu alunecă sub greutate."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Băț drumeție MT500 antișoc", price:109.99, qty:2, url:D("bat-drumetie-cu-sistem-de-absorbtie-a-socurilor-mt500-antisoc","324328"), desc:"Sistem antișoc — contează la coborâre cu 20 kg pe spate."}
+    ]},
+    { id:"briceag", name:"Cuțit de buzunar sau de drumeție", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Briceag pliabil KA704, 15 cm", price:7.99, url:E("/briceag-pliabil-ka704-15cm-avi-1213/pd/DC00YHYBM/"), desc:"8 lei. Taie sfoară și pâine — nu-i cere mai mult."},
+      {tier:"mediu", shop:"eMAG", name:"Briceag Victorinox 0.3303 Waiter", price:109.99, url:E("/briceag-victorinox-0-3303-waiter-rosu-7611160000064/pd/DY2ZZ7MBM/"), desc:"Lamă, desfăcător, tirbușon. Se ține o viață și nu cedează."},
+      {tier:"premium", shop:"eMAG", name:"Briceag Victorinox Rally", price:129.99, url:E("/briceag-victorinox-rally-rosu-0-6163-b02030/pd/D4NLVMMBM/"), desc:"Foarte mic (58 mm), cu foarfecă și șurubelniță. Stă pe breloc, nu-l simți."}
+    ]},
+    { id:"perna", name:"Pernă", note:"Alternativa gratis: hainele de rezervă puse în sacul de compresie.", variants:[
+      {tier:"buget", shop:"eMAG", name:"Pernă gonflabilă Intex Downy", price:15.99, url:E("/perna-gonflabila-intex-downy-43cm-x-28cm-x-9cm-blue-6941057403878/pd/DF499FBBM/"), desc:"16 lei. Plastic — transpiri pe ea și foșnește, dar funcționează."},
+      {tier:"mediu", shop:"eMAG", name:"Pernă gonflabilă Intex camping", price:30.25, url:E("/perna-gonflabila-intex-pentru-camping-43-x-28-x-9-cm-176/pd/D4XW51BBM/"), desc:"Suprafață textilă — mult mai confortabilă pe obraz."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Pernă gonflabilă trekking MT500", price:69.99, url:D("perna-gonflabila-trekking-mt500-gri","343604"), desc:"~80 g, se strânge la mărimea unui pumn. Singura care merită cărată."}
+    ]},
+    { id:"dopuri", name:"Dopuri pentru urechi", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Dopuri de urechi JENUOS, silicon", price:13.92, url:E("/dopuri-de-urechi-jenuosr-silicon-reduce-zgomotul-si-imbunatateste-calitatea-somnului-negru-le02-li-230802-gyes-yh-hei/pd/D9ZBTYYBM/"), desc:"Silicon reutilizabil, cu cutie. 14 lei."},
+      {tier:"mediu", shop:"eMAG", name:"OHROPAX Soft, 10 dopuri din spumă", price:16.83, url:E("/10-dopuri-de-urechi-ohropax-soft-din-spuma-moale-pentru-confort-sporit-4003626615012/pd/DDHGQM2BM/"), desc:"Cea mai bună izolare pe leu, 10 bucăți. De unică folosință."},
+      {tier:"premium", shop:"eMAG", name:"Dopuri NUODWELL, 3 straturi de izolare", price:18, url:E("/dopuri-de-urechi-nuodwell-3-straturi-de-izolare-fonica-material-siliconic-impermeabil-imbunatateste-calitatea-somnului-negru-cwz0063/pd/D8YMQBYBM/"), desc:"Silicon cu trei straturi, se spală și se refolosesc tot XCC-ul."}
+    ]},
+    { id:"parazapezi", name:"Parazăpezi pentru ghete", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Parazăpezi impermeabile, mărime L", price:43.20, url:E("/parazapezi-impermeabile-pentru-incaltaminte-cu-dublu-ajustabile-sistem-de-prindere-axroad-mall-unisex-rezistente-la-vant-potrivit-pentru-activitati-in-aer-liber-si-alpinism-l-negru-tzt-325/pd/D9HMW8YBM/"), desc:"Țin pietrișul și apa afară din ghete. Prindere dublă, 43 lei."},
+      {tier:"premium", shop:"Decathlon", name:"GEONAUTE Jambiere cursă de orientare", price:94.99, url:D("jambiere-de-protectie-cursa-de-orientare","303542"), desc:"Făcute pentru alergare prin tufișuri — protejează toată gamba, nu doar glezna."}
+    ]},
+    { id:"spray-imperm", name:"Spray de impermeabilizare (geacă și bocanci)", note:"Nu e pe lista organizatorului. Testul: dacă apa nu mai face picături pe geacă sau pe bocanci și intră în material, stratul hidrofob s-a dus și ai nevoie de el. Se pune doar pe material curat și are nevoie de timp de uscare, deci fă-o acasă cu câteva zile înainte, nu-l cara în rucsac. Varianta mică de 100 ml (24,99 lei) ajunge, după Decathlon, pentru o singură pereche de încălțăminte.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"DECATHLON Spray reimpermeabilizare încălțăminte, textile, materiale, 300 ml", price:39.99, url:D("spray-reimpermeabilizare-pentru-incaltaminte-textile-si-materiale-300ml","352278"), desc:"Un singur spray pentru tot: reactivează stratul hidrofob la bocancii cu membrană și la echipamentul impermeabil. După Decathlon, un tub ajunge la 6 perechi de încălțăminte sau 3 geci, deci și pentru geacă, și pentru bocanci. 20 cm distanță, 15 minute uscare, al doilea strat. Nota 4,6 din 1.978 de recenzii. Nu spune nimic despre PFC sau respirabilitate."},
+      {tier:"mediu", shop:"Decathlon", name:"Spray 300 ml pentru bocanci + lichid wash-in 250 ml pentru geacă", price:84.98, url:D("lichid-de-reimpermeabilizare-pentru-textile-folosit-in-masina-de-spalat-250-ml","348634"), parts:[
+        {name:"Spray reimpermeabilizare 300 ml", price:39.99, url:D("spray-reimpermeabilizare-pentru-incaltaminte-textile-si-materiale-300ml","352278")},
+        {name:"Lichid wash-in 250 ml", price:44.99, url:D("lichid-de-reimpermeabilizare-pentru-textile-folosit-in-masina-de-spalat-250-ml","348634")}
+      ], desc:"La geacă, lichidul din mașina de spălat intră uniform în tot materialul, nu doar unde ajunge sprayul. 100 ml (4 capace) la 30°, pe delicat, fără detergent, pe geaca deja spălată, apoi căldură moderată (uscător de păr sau uscător pe delicat) ca să se activeze. Lichidul are 4,3 din 334 de recenzii."},
+      {tier:"premium", shop:"Decathlon + marketplace", name:"Grangers Performance Repel Plus 275 ml + Nikwax pentru bocanci 125 ml", price:131.38, url:"https://www.decathlon.ro/p/mp/grangers/imbracaminte-performance-repel-plus/_/R-p-7cc634e0-5463-4594-bd8c-95ce89a26e6d", parts:[
+        {name:"Grangers Performance Repel Plus 275 ml (Skalnik RO)", price:71.39, url:"https://www.decathlon.ro/p/mp/grangers/imbracaminte-performance-repel-plus/_/R-p-7cc634e0-5463-4594-bd8c-95ce89a26e6d"},
+        {name:"Nikwax spray piele și textile 125 ml", price:59.99, url:D("spray-de-reimpermeabilizare-tratament-hidrofob-pentru-piele-si-textile-nikwax","X8780411")}
+      ], desc:"Grangers e singurul de pe Decathlon care scrie clar „fără compuși PFC”, că păstrează respirabilitatea și că merge pe membrane Gore-Tex. Îl vinde un magazin din marketplace (3,7 din 3 recenzii). Nikwax e vândut de Decathlon (4,5 din 107), pentru bocanci din nubuc, piele întoarsă sau sintetic: se dă pe bocancul ud, de la 5 cm, și se șterge excesul după 2 minute."}
+    ]},
+    { id:"coarda", name:"Coardă de 10 m, ⌀ 8 mm (1 buc. / echipă)", note:"", variants:[
+      {tier:"buget", shop:"eMAG", name:"Coardă de siguranță poliester, 10 m", price:79.30, url:E("/coarda-de-siguranta-pentru-alpinism-in-aer-liber-tebnaild-poliester-10m-albastru-galben-753822219685/pd/D7L3DKYBM/"), desc:"10 m, gata terminată la capete. Pentru uz utilitar, nu pentru asigurare la cădere."},
+      {tier:"mediu", shop:"Decathlon", name:"Coardă 8 mm × 10 m, plutitoare", price:84.99, url:D("coarda-plutitoare-navigatie-pentru-tractare-8mm-x-10m-galben-gri","178474"), desc:"Exact 8 mm × 10 m, cum cere lista. Coardă de tractare — utilitară, nu de alpinism."},
+      {tier:"premium", shop:"eMAG", name:"Coardă dinamică Gilmonte Gill 8,3 mm (10 m)", price:98.60, url:E("/coarda-dinamica-gilmonte-zilmont-gill-8-3mm-verde-1m-5043/pd/DZ8YF7MBM/"), desc:"Se cumpără la metru: 9,86 lei/m, deci ~99 lei pentru 10 m. Singura din cele trei certificată pentru sarcină dinamică."}
+    ]}
+  ]}
+  ];
+  var NOTES = [
+    "Prețurile și disponibilitatea sunt de pe Decathlon.ro și eMAG.ro, verificate pe 10 septembrie 2026; sacii de dormit, saltelele și mănușile re-verificate pe 19 septembrie. Se schimbă — verifică pe pagina produsului înainte să comanzi.",
+    "Butelia de gaz pierde presiune la frig: noaptea bag-o în sacul de dormit. Bateriile frontalei se descarcă mai repede la frig — ține frontala într-un buzunar interior.",
+    "Temperaturile din Maramureș: normalele 1991–2020 pentru Ocna Șugatag și 2014–2026 pentru stația Iezer (sursa: Wikipedia, tabelele climatice ale stațiilor).",
+    "Ce e marcat „per echipă” se împarte: un cort, o busolă, un fierăstrău, o coardă. Nu le cumpărați fiecare separat — vorbiți în echipă înainte.",
+    "Pentru coardă: doar varianta dinamică certificată (premium) e făcută pentru a prelua o cădere. Celelalte două sunt corzi utilitare — bune pentru legat, tras, improvizat, nu pentru asigurare.",
+    "La eMAG, verifică vânzătorul și termenul de livrare: multe dintre produsele ieftine vin de la terți, cu 1–2 săptămâni de așteptare.",
+    "Decathlon are magazin în Oradea — pentru rucsac, ghete de rezervă, sac de dormit și saltea merită să le probezi fizic înainte.",
+    "Bifele, alegerile și notițele se salvează în baza ta de date Supabase după ce intri cu linkul primit pe email, și le vezi la fel pe telefon și pe laptop. Fără cont rămân doar în browserul respectiv.",
+    "Pe OLX: cere poze cu eticheta interioară și cu obiectul în uz, întreabă anul cumpărării, și plătește la întâlnire sau ramburs. Refuză orice vânzător care insistă pe un link de „livrare OLX” trimis pe WhatsApp — e cea mai comună fraudă de pe piață.",
+    "Prețurile „second corect” sunt estimări bazate pe medianele reale cerute pe OLX și Vinted azi, corectate pentru starea obiectului. Un anunț mai scump nu e neapărat o țeapă — dar ai un punct de plecare pentru negociere."
+  ];
+  var TIERS = ["buget","mediu","premium"];
+  var TIER_LABEL = {buget:"Buget", mediu:"Mediu", premium:"Premium"};
+  var OWNED = {"rucsac":1,"frontala":1,"baterii":1,"izopren":1,"sac-dormit":1,"jacheta":1,"pantaloni-scurti":1,"tricou":1,"incaltaminte-sport":1};
+  var MARKET = [
+  { cat:"Echipament personal", groups:[
+    { name:"Rucsac de drumeție", verdict:"yes", where:["OLX","Vinted"],
+      brands:[
+        {b:"Quechua / Forclaz", o:"FR", t:"val", w:"Decathlon. Cel mai des văzut pe OLX în România, tocmai pentru că toată lumea îl cumpără.", nou:"230–700", sec:"80–250"},
+        {b:"Husky / Hannah / Trimm", o:"CZ", t:"val", w:"Mărci cehe, raport preț-calitate foarte bun, croială europeană. Se găsesc mai rar, dar ieftin.", nou:"300–600", sec:"120–250"},
+        {b:"Ferrino", o:"IT", t:"", w:"Solid, fără fițe. Cel mai subevaluat second din câte am văzut: cerere mică, calitate bună.", nou:"470–800", sec:"80–300"},
+        {b:"Tatonka / Vaude", o:"DE", t:"", w:"Foarte durabile, un pic mai grele. Vaude apare des pe OLX în jur de 300 lei.", nou:"400–900", sec:"150–330"},
+        {b:"Deuter", o:"DE", t:"prem", w:"Referința pentru sistemul de ventilație a spatelui. Aircontact / Futura sunt modelele de trekking.", nou:"384–990", sec:"250–450"},
+        {b:"Osprey / Gregory / Lowe Alpine", o:"US / UK", t:"prem", w:"Cel mai bun transfer al greutății pe șolduri. Osprey are garanție pe viață, care se transferă.", nou:"500–1.200", sec:"300–700"}
+      ],
+      check:"Rucsacul e cea mai sigură achiziție second din listă — nu are nimic care „expiră”. Verifică: <b>cusăturile de la baza bretelelor și ale centurii de bazin</b> (acolo cedează primele), cataramele (se cumpără de schimb), fermoarele, și <b>spuma din panoul de spate</b> — la rucsacurile de 15+ ani se sfărâmă. Cere o poză cu rucsacul încărcat și pus pe spate."
+    },
+    { name:"Frontală", verdict:"care", where:["OLX"],
+      brands:[
+        {b:"Petzl", o:"FR", t:"prem", w:"Standardul. Tikka / Tikkina sunt modelele accesibile, Actik și Swift cele serioase.", nou:"189–600", sec:"90–275"},
+        {b:"Black Diamond", o:"US", t:"prem", w:"Alternativa directă la Petzl, cam aceleași prețuri. Spot și Storm sunt modelele clasice.", nou:"250–700", sec:"120–200"},
+        {b:"Ledlenser", o:"DE", t:"", w:"Foarte luminoase, un pic mai grele. Se vând second aproape la preț de nou — nu merită.", nou:"250–600", sec:"200–350"},
+        {b:"Fenix / Nitecore / Armytek", o:"CN / EE", t:"val", w:"Raport lumeni-leu imbatabil, construcție bună. Manuale mai încurcate.", nou:"120–400", sec:"60–180"}
+      ],
+      check:"Aici e o capcană: la frontalele reîncărcabile <b>acumulatorul e consumabilul</b>, iar la un model de 5 ani ține poate o treime din autonomia din specificații. Pentru second, caută modele care merg pe baterii AAA (Petzl Tikka, Actik Core cu suport AAA) — bateria o schimbi tu. Verifică lentila (se îngălbenește) și elasticul."
+    },
+    { name:"Lopățică", verdict:"yes", where:["vechituri","OLX"],
+      brands:[
+        {b:"Klappspaten (surplus DE)", o:"DE", t:"val", w:"Lopata pliabilă a armatei germane, oțel. Indestructibilă și cel mai ieftin lucru din toată lista.", nou:"80–150", sec:"30–60"},
+        {b:"Fiskars / Gerber E-Tool", o:"FI / US", t:"", w:"Versiunea civilă, mai ușoară. Bună și pentru cort și foc.", nou:"150–350", sec:"70–150"},
+        {b:"Sea to Summit / TheTentLab", o:"AU / US", t:"prem", w:"Lopățica de aluminiu de 20–30 g, făcută exact pentru ce cere lista XCC. Nu se găsește second.", nou:"60–160", sec:"—"}
+      ],
+      check:"Surplusul militar e alegerea rațională aici: costă 40 de lei și nu se rupe. Singurul contra e greutatea — 600–800 g față de 30 g la varianta de trekking. Când numeri kilogramele pentru 20 kg pe spate, diferența asta contează mai mult decât banii."
+    },
+    { name:"Folie de supraviețuire, cremă UV, igienă", verdict:"no", where:[],
+      brands:[
+        {b:"Lifesystems / Coghlan's", o:"UK / CA", t:"", w:"Brandurile de referință pentru folii și truse de urgență.", nou:"12–100", sec:"—"},
+        {b:"MFH / Mil-Tec", o:"DE", t:"val", w:"Surplus-style, ieftin, se găsește în magazinele de vânătoare și la vechituri.", nou:"20–80", sec:"—"}
+      ],
+      check:"Sunt consumabile: folia e de unică folosință, crema are termen de valabilitate (protecția scade real după deschidere), iar produsele de igienă nu se cumpără folosite. Aici cumperi nou, e oricum ieftin."
+    }
+  ]},
+
+  { cat:"Îmbrăcăminte", groups:[
+    { name:"Jachetă și pantaloni de ploaie", verdict:"care", where:["Vinted","OLX"],
+      brands:[
+        {b:"Regatta / Loap / Alpine Pro / Kilpi", o:"UK / CZ", t:"val", w:"Impermeabile simple, membrane proprii de 5.000–10.000 mm. Fac treaba o vară.", nou:"120–400", sec:"40–120"},
+        {b:"Jack Wolfskin", o:"DE", t:"", w:"Membrana Texapore. Cea mai bună afacere second din toată lista: OLX mediana 175 lei, Vinted 100.", nou:"480–1.600", sec:"100–240"},
+        {b:"Columbia / Marmot / Salomon", o:"US / FR", t:"", w:"Mijlocul pieței, se găsesc constant pe Vinted la 100–250 lei.", nou:"400–1.200", sec:"100–250"},
+        {b:"Salewa / Mammut / The North Face", o:"IT / CH / US", t:"prem", w:"Gore-Tex real, croială de munte. OLX mediana 350 lei pentru toate trei.", nou:"800–2.200", sec:"200–750"},
+        {b:"Arc'teryx / Rab / Haglöfs / Millet", o:"CA / UK / SE", t:"prem", w:"Vârful. Rar pe OLX și scump chiar și second, dar durează 10+ ani dacă e întreținut.", nou:"1.500–4.000", sec:"500–1.500"}
+      ],
+      check:"Singurul lucru care contează: <b>starea membranei</b>. Întoarce jacheta pe dos și uită-te la stratul interior — dacă e cojit, băşicat sau se desprinde în fâșii, e delaminată și nu se repară. Cere neapărat poză cu interiorul. Tratamentul exterior (DWR) care lasă apa să intre <em>se poate</em> reface cu Nikwax de 50 de lei; delaminarea nu. Nu lua hardshell mai vechi de 8–10 ani, oricât de bine arată."
+    },
+    { name:"Polar", verdict:"yes", where:["Vinted","OLX"],
+      brands:[
+        {b:"Quechua / Regatta / Loap", o:"FR / UK", t:"val", w:"Polar simplu 200 g/m². Diferența față de mărcile scumpe e mică pe un polar.", nou:"45–150", sec:"25–70"},
+        {b:"The North Face / Jack Wolfskin", o:"US / DE", t:"", w:"Cele mai des găsite pe Vinted, mediana 107 lei. Croială bună, materiale Polartec pe modelele mai vechi.", nou:"350–900", sec:"85–275"},
+        {b:"Patagonia / Mammut / Salewa", o:"US / CH / IT", t:"prem", w:"Polartec, R1/R2. Patagonia repară gratuit orice, oricând, inclusiv la haine cumpărate second.", nou:"600–1.200", sec:"150–400"}
+      ],
+      check:"Polarul e cea mai sigură haină de cumpărat second: <b>nu are membrană, nu are lipici, nu are nimic care să cedeze</b>. Se face scămos și își pierde puful, dar ține la fel de cald. Verifică doar fermoarul și manșetele. La 90–150 lei pe Vinted, un polar TNF e mai bun decât un MH500 nou."
+    },
+    { name:"Bluză și pantaloni de corp (merinos)", verdict:"care", where:["Vinted"],
+      brands:[
+        {b:"Quechua / Wedze sintetic", o:"FR", t:"val", w:"Sintetic ieftin. Vinted, mediana 35 lei — dar miroase după două zile, care e exact problema la XCC.", nou:"35–90", sec:"20–60"},
+        {b:"Icebreaker", o:"NZ", t:"prem", w:"Brandul care a inventat categoria. 150–200 g/m² e grosimea potrivită. Vinted 80–320.", nou:"459–978", sec:"80–320"},
+        {b:"Devold / Woolpower / Aclima", o:"NO / SE", t:"prem", w:"Scandinave, mai groase și mai durabile decât Icebreaker. Woolpower e ce poartă armata suedeză.", nou:"350–800", sec:"100–300"},
+        {b:"Ortovox", o:"AT", t:"prem", w:"Merinos de alpinism, cu zone întărite. OLX mediana 350 lei.", nou:"500–1.000", sec:"220–500"},
+        {b:"Smartwool", o:"US", t:"", w:"Mai subțire, foarte confortabil. Se găsește des pe Vinted la 70–130 lei.", nou:"300–600", sec:"70–150"}
+      ],
+      check:"Merinosul second e ieftin (Vinted, „bluza merino”, mediana 82 lei) dar are un dușman: <b>moliile</b>. Cere poze la subsuoară, pe piept și la coate, și caută găurele de 2–3 mm — nu se repară invizibil și se măresc. Verifică și grosimea declarată: sub 150 g/m² e prea subțire pentru nopți reci. Lâna care s-a subțiat până se vede lumina prin ea e la capătul vieții."
+    },
+    { name:"Șosete, lenjerie, buff, căciulă", verdict:"no", where:["Vinted"],
+      brands:[
+        {b:"Darn Tough", o:"US", t:"prem", w:"Merinos ~66%, tricot dens, garanție pe viață de la producător. În RO, la 4camping la ~216 lei; pe eMAG de două ori mai scump.", nou:"190–270", sec:"—"},
+        {b:"Smartwool / Bridgedale", o:"US / UK", t:"prem", w:"Smartwool Hike Full Cushion: 124 lei la 4camping, 150–175 pe eMAG. Bridgedale pe eMAG e aproape numai la ski și scump.", nou:"110–175", sec:"—"},
+        {b:"Comodo / Lasting", o:"PL / CZ", t:"val", w:"Merinos 70%, mărci central-europene corecte. Pe eMAG, perechea la 60–70 lei.", nou:"60–70", sec:"—"},
+        {b:"Buff", o:"ES", t:"", w:"Brandul care a dat numele obiectului. Restul sunt copii, la o cincime din preț.", nou:"70–120", sec:"20–40"},
+        {b:"Quechua / Forclaz", o:"FR", t:"val", w:"SH900 merinos (88% lână): 110 lei setul de două. Atenție la nume: Solognac ACT 500 „merinos” are doar 21% lână, iar Hike 900 18%.", nou:"30–110", sec:"—"},
+      ],
+      check:"Șosetele și lenjeria sunt exact obiectele care se uzează și pe care nu vrei să le iei folosite — nici igienic, nici practic: talpa unei șosete de merinos e subțiată după 100 de zile de mers, chiar dacă arată bine. Buff-ul și căciula sunt OK second dacă le speli, dar sunt ieftine oricum."
+    }
+  ]},
+
+  { cat:"Echipamente pentru gătit / luat masa", groups:[
+    { name:"Oală, gamelă, tacâmuri", verdict:"yes", where:["vechituri","OLX"],
+      brands:[
+        {b:"Gamelă militară (surplus)", o:"RO / DE / CZ", t:"val", w:"Aluminiu sau inox, se găsește la orice piață de vechituri. Grea, dar nu se strică niciodată.", nou:"60–120", sec:"30–60"},
+        {b:"Trangia", o:"SE", t:"", w:"Sistemul suedez cu arzător pe alcool. Legendar, se transmite din generație în generație.", nou:"400–800", sec:"150–350"},
+        {b:"Primus / GSI / Sea to Summit", o:"SE / US / AU", t:"", w:"Seturi de trekking gândite să intre unul în altul. Ușoare, aluminiu anodizat.", nou:"150–500", sec:"70–200"},
+        {b:"Toaks / BRS / Lixada (titan)", o:"CN", t:"val", w:"Titan la preț de aluminiu, comandat online. 80–100 g pentru o oală de 750 ml.", nou:"120–300", sec:"—"},
+        {b:"MSR / Sea to Summit X-Pot", o:"US / AU", t:"prem", w:"Vârful: oale pliabile, sisteme cu schimbător de căldură care taie consumul de gaz.", nou:"400–900", sec:"180–400"}
+      ],
+      check:"Inoxul și aluminiul nu au ce să păţească — asta e categoria unde piața de vechituri bate orice magazin. Verifică doar să nu fie fundul deformat (nu stă stabil pe arzător) și, la aluminiu vechi, să nu fie interiorul cojit. O gamelă de armată de 40 de lei face exact ce face un set de 180."
+    },
+    { name:"Arzător (primus)", verdict:"yes", where:["OLX"],
+      brands:[
+        {b:"Campingaz", o:"FR", t:"val", w:"Cel mai accesibil și cel mai răspândit în RO. Atenție: unele modele folosesc cartușe cu valvă proprie.", nou:"130–300", sec:"65–170"},
+        {b:"BRS-3000T / Fire-Maple / Kovea", o:"CN / KR", t:"val", w:"BRS-3000T cântărește 25 g și costă 100 de lei. Nu e cel mai stabil, dar merge.", nou:"100–300", sec:"—"},
+        {b:"Primus", o:"SE", t:"", w:"Brandul care a dat numele generic „primus” în română. Foarte durabil. OLX mediana 220 lei.", nou:"440–1.650", sec:"150–350"},
+        {b:"MSR PocketRocket", o:"US", t:"prem", w:"Referința pentru arzătoarele cu filet. Deluxe are aprindere piezo și regulator de presiune.", nou:"650–750", sec:"250–350"},
+        {b:"Jetboil", o:"US", t:"prem", w:"Sistem integrat oală-arzător, fierbe 0,5 L în 2 minute cu jumătate din gazul obișnuit.", nou:"700–1.400", sec:"300–600"}
+      ],
+      check:"Arzătoarele pe gaz sunt aproape indestructibile — un Primus de 15 ani merge ca nou. Verifică: <b>filetul să nu fie strâmb</b> (se vede când îl înșurubezi pe cartuș), duza să nu fie înfundată, și picioarele să se deschidă complet. Aprinderea piezo e prima care se strică — nu e o problemă, aprinzi cu bricheta. <b>Cartușul de gaz se cumpără NOU, întotdeauna</b>: un cartuș pornit sau vechi poate avea valva slăbită."
+    },
+    { name:"Bidon, cană, prosop", verdict:"care", where:["OLX","vechituri"],
+      brands:[
+        {b:"Nalgene", o:"US", t:"", w:"Bidonul de plastic care nu se sparge. Gura largă, se poate face ceai în el. Standardul american.", nou:"80–150", sec:"30–70"},
+        {b:"Sigg / Laken", o:"CH / ES", t:"", w:"Aluminiu, ușor. La modelele vechi interiorul e lăcuit — verifică să nu fie cojit.", nou:"90–200", sec:"30–80"},
+        {b:"Klean Kanteen / Camelbak", o:"US", t:"prem", w:"Inox cu perete dublu, sau rezervoare cu tub. Camelbak e standardul pentru rezervoare.", nou:"150–350", sec:"60–150"},
+        {b:"Quechua / Forclaz", o:"FR", t:"val", w:"Bidonul de aluminiu de 50 de lei și rezervorul MT500 de 2 L la 75 de lei sunt greu de batut.", nou:"50–150", sec:"20–60"}
+      ],
+      check:"Bidoanele de inox și plastic sunt OK second, dacă le poți spăla bine. Două lucruri de evitat: <b>bidoanele de aluminiu vechi cu lacul interior cojit</b> (aluminiul intră în apă) și rezervoarele cu tub folosite — tubul și supapa fac mucegai pe interior și nu se curăță. Prosopul din microfibră nu se cumpără folosit."
+    }
+  ]},
+
+  { cat:"Pentru dormit", groups:[
+    { name:"Sac de dormit", verdict:"care", where:["OLX"],
+      brands:[
+        {b:"Quechua / Husky / Trimm", o:"FR / CZ", t:"val", w:"Sintetice, voluminoase. Cel mai des pe OLX. Husky are și modele de puf decente.", nou:"150–500", sec:"60–200"},
+        {b:"Pinguin", o:"CZ", t:"val", w:"Ceh, foarte bun raport preț-căldură. eMAG nou 290–570, OLX mediana 270 — diferența e prea mică ca să merite second.", nou:"288–570", sec:"200–300"},
+        {b:"Warmpeace", o:"CZ", t:"", w:"Cel mai bun raport calitate-preț la puf din Europa de Est. Greu de găsit, merită căutat.", nou:"464–2.440", sec:"250–500"},
+        {b:"Deuter / Ferrino / Vango", o:"DE / IT / UK", t:"", w:"Mijlocul pieței, sintetic bun sau puf de nivel mediu. OLX 250–370 lei.", nou:"400–900", sec:"200–370"},
+        {b:"Cumulus", o:"PL", t:"prem", w:"Puf polonez, se comandă pe măsura ta, direct de la producător. Cel mai bun raport greutate-căldură pe leu din Europa.", nou:"1.200–2.500", sec:"600–1.200"},
+        {b:"Rab / Mountain Equipment / Yeti", o:"UK / DE", t:"prem", w:"Puf de expediție, 800+ cuin. Scump nou, dar durează 15 ani dacă e depozitat corect.", nou:"1.500–4.000", sec:"600–1.500"}
+      ],
+      check:"<b>Cel mai riscant obiect second din toată lista.</b> Puful care a stat comprimat în sac ani de zile își pierde definitiv umflarea, și un sac care nu se umflă nu ține de cald — nu se repară și nu se vede în poze. Cere obligatoriu: o poză cu sacul <b>umflat pe pat după 20 de minute</b>, anul cumpărării, și cum a fost ținut (agățat sau într-un sac mare de bumbac = bine; comprimat în sacul de transport = mort). Miros de mucegai sau de umezeală = refuzi, indiferent de preț. Sacii sintetici își pierd izolarea în 5–8 ani de folosire reală, chiar depozitați bine."
+    },
+    { name:"Izopren / saltea", verdict:"care", where:["OLX","vechituri"],
+      brands:[
+        {b:"Izopren de spumă (orice marcă, inclusiv surplus)", o:"—", t:"val", w:"Cea mai sigură achiziție second din toată lista: spuma cu celule închise nu are ce să păţească.", nou:"45–120", sec:"30–80"},
+        {b:"Quechua / Forclaz autogonflabilă", o:"FR", t:"val", w:"Forclaz L la 180 lei nou. Second se găsește la 100–150, diferența e mică.", nou:"180–250", sec:"100–160"},
+        {b:"Therm-a-Rest", o:"US", t:"prem", w:"Referința absolută. NeoAir XLite e saltea de 350 g cu izolare reală. OLX 165–300 lei.", nou:"293–1.780", sec:"165–400"},
+        {b:"Exped / Sea to Summit / Nemo", o:"CH / AU / US", t:"prem", w:"Concurenții direcți, cu valve mai bune și izolare cu puf sau folie reflectorizantă.", nou:"400–1.500", sec:"180–500"}
+      ],
+      check:"Împarte categoria în două. <b>Izoprenul de spumă second e o afacere</b> — 40 de lei, nu se strică, se prinde pe exteriorul rucsacului. <b>Saltelele gonflabile second sunt o loterie</b>: găurile de mărimea unui ac nu se văd și nu se aud. Regula: umfl-o la tine acasă sau la vânzător și <b>lasă-o 30 de minute</b> înainte de a plăti. Dacă are bule între straturi (delaminare), e de aruncat. Un petic reparat corect e OK; trei petice înseamnă că materialul cedează."
+    }
+  ]},
+
+  { cat:"Echipamente de echipă", groups:[
+    { name:"Cort", verdict:"care", where:["OLX"],
+      brands:[
+        {b:"Quechua / High Peak / Easy Camp / Coleman", o:"FR / DE / DK / US", t:"val", w:"Corturi de camping, nu de trekking: grele (4–6 kg) și cu arceuri de fibră de sticlă.", nou:"300–800", sec:"150–400"},
+        {b:"Naturehike", o:"CN", t:"val", w:"Raport greutate-preț surprinzător de bun, comandat online. Cloud-Up 2 cântărește 1,8 kg.", nou:"600–1.100", sec:"400–700"},
+        {b:"Husky / Hannah", o:"CZ", t:"", w:"Cele mai des găsite pe OLX în RO, mediana 725 lei. Bune, cu arceuri de aluminiu.", nou:"496–1.960", sec:"380–950"},
+        {b:"Ferrino / Vango / Robens", o:"IT / UK / DK", t:"", w:"Solide, autoportante, pentru vânt real. Ferrino nou de la 1.040 lei.", nou:"1.040–2.800", sec:"450–900"},
+        {b:"MSR / Vaude / Big Agnes", o:"US / DE", t:"prem", w:"Trekking serios: 1,5–2,5 kg, arceuri DAC, pânză de calitate. OLX 800–1.500 lei.", nou:"2.000–4.500", sec:"800–1.500"},
+        {b:"Hilleberg", o:"SE", t:"prem", w:"Referința mondială pentru condiții grele. Se cumpără o dată în viață și se vinde greu sub 60% din preț.", nou:"5.000–12.000", sec:"2.500–7.000"}
+      ],
+      check:"Un singur test decide totul: <b>pipăie fața interioară a pânzei exterioare</b>. Dacă e lipicioasă, se ia pe degete sau miroase acru, poliuretanul s-a hidrolizat — cortul e de aruncat, oricât de bine arată din exterior. Se întâmplă după 8–12 ani, mai repede dacă a fost strâns umed. Verifică și banda de pe cusături (să nu se cojească) și numără țărușii și arceurile. Arceurile îndoite sau crăpate se înlocuiesc ieftin; pânza nu se înlocuiește. Cere să-l vezi montat."
+    },
+    { name:"Busolă", verdict:"yes", where:["OLX","vechituri"],
+      brands:[
+        {b:"Busolă militară (surplus RO / DE / rusesc)", o:"—", t:"val", w:"Se găsesc la vechituri și pe OLX, mediana 150 lei. Robuste, dar fără riglă pentru lucru pe hartă.", nou:"80–200", sec:"60–200"},
+        {b:"Suunto", o:"FI", t:"", w:"A-10 la 122 lei nou e cea mai bună busolă pe leu de pe piața RO. Nu o lua second, nu are sens.", nou:"122–400", sec:"80–200"},
+        {b:"Silva", o:"SE", t:"prem", w:"Standardul pentru orientare sportivă. Ranger și Expedition sunt modelele de referință.", nou:"150–500", sec:"200–500"},
+        {b:"Recta / Cammenga", o:"CH / US", t:"prem", w:"Busole cu prismă, pentru azimut precis. Cammenga e cea a armatei americane, umplută cu tritiu.", nou:"400–1.200", sec:"250–700"}
+      ],
+      check:"Busola e mecanică și durează decenii, dar are un mod clar de a muri: <b>bula de aer în capsula cu lichid</b>. Dacă vezi o bulă mai mare decât un bob de orez, capsula are o scurgere și acul se va mișca greșit. Testează: rotește busola, lasă-o și vezi dacă acul se stabilizează în 3–4 secunde și dacă arată <b>exact același nord venind din ambele direcții</b>. Ține-o departe de telefon când testezi. La cele militare, verifică dacă are riglă și scări de hartă — fără ele nu poți lucra pe hartă, doar afli unde e nordul."
+    },
+    { name:"Brichetă și aprins focul", verdict:"no", where:["vechituri"],
+      brands:[
+        {b:"BIC / Clipper", o:"FR / ES", t:"val", w:"5–15 lei. Ia trei și pune-le în locuri diferite. Clipper se poate reumple.", nou:"5–120", sec:"—"},
+        {b:"Zippo", o:"US", t:"", w:"Singura brichetă care merită cumpărată second: orice piesă se schimbă și se reface complet.", nou:"108–400", sec:"60–200"},
+        {b:"Light My Fire Swedish FireSteel", o:"SE", t:"prem", w:"Amnar cu ferocerium. Merge ud, merge la −30 °C, ține 12.000 de aprinderi. Ia unul indiferent de ce brichetă ai.", nou:"60–130", sec:"30–60"}
+      ],
+      check:"Brichetele obișnuite nu se cumpără second — sunt de 5 lei noi. Merită însă o regulă: la XCC, o brichetă udă nu aprinde nimic, așa că <b>ai nevoie de redundanță, nu de calitate</b>: două brichete ieftine în pungi separate plus un amnar bat o brichetă scumpă. Amnarul e singurul care funcționează garantat după ce a stat în apă."
+    },
+    { name:"Fierăstrău de mână", verdict:"yes", where:["OLX","vechituri"],
+      brands:[
+        {b:"Fierăstrău pliabil generic", o:"CN", t:"val", w:"20–60 lei nou, lamă SK5. Taie destul pentru un foc de tabără.", nou:"20–60", sec:"15–40"},
+        {b:"Bahco Laplander", o:"SE", t:"", w:"Referința pentru bushcraft: 200 g, lamă de 240 mm, se schimbă. Ce folosesc pădurarii scandinavi.", nou:"120–200", sec:"60–120"},
+        {b:"Fiskars / Gerber", o:"FI / US", t:"", w:"Alternative solide, se găsesc în magazinele de bricolaj din RO.", nou:"80–200", sec:"40–100"},
+        {b:"Silky", o:"JP", t:"prem", w:"Cele mai bune fierăstraie de mână din lume. Taie de trei ori mai repede. Scumpe și greu de găsit în RO.", nou:"300–800", sec:"150–400"}
+      ],
+      check:"Un fierăstrău second e o achiziție bună fiindcă <b>lama e consumabil și se schimbă</b> — la Bahco Laplander o lamă nouă costă 40 de lei. Verifică articulația (să nu joace) și blocarea în poziție deschisă: un fierăstrău care se pliază în timp ce tai e periculos. Dinții tociti nu se mai ascut la lamele moderne cu dinți căliți — se înlocuiesc."
+    },
+    { name:"Coardă, carabiniere, chingi", verdict:"no", where:[],
+      brands:[
+        {b:"Beal / Petzl / Edelrid", o:"FR / DE", t:"prem", w:"Producătorii de referință pentru corzi certificate EN 892 / EN 1891.", nou:"300–900", sec:"—"},
+        {b:"Tendon / Simond", o:"CZ / FR", t:"", w:"Raport bun. Simond (Decathlon) e cel mai accesibil în RO.", nou:"200–600", sec:"—"},
+        {b:"Coardă utilitară (poliester, polipropilenă)", o:"—", t:"val", w:"Pentru legat, tras, întins prelate. Nu e echipament de siguranță și nu se pretinde a fi.", nou:"70–120", sec:"—"}
+      ],
+      check:"<b>Coarda, carabinierele, chingile, harnașamentul și casca nu se cumpără niciodată second.</b> Nu ai cum să știi câte căderi a luat coarda, dacă a stat lângă un acumulator sau într-un garaj cu solvenți, sau ce vârstă are miezul — iar toate astea o slăbesc invizibil, fără nicio urmă la exterior. O coardă are o durată de viață declarată de producător de la data fabricației, nu de la prima folosire. Pentru XCC îți trebuie oricum doar o coardă utilitară de 10 m: cumpără-o nouă, costă 80 de lei."
+    }
+  ]},
+
+  { cat:"Opțional", groups:[
+    { name:"Bețe de drumeție", verdict:"yes", where:["OLX"],
+      brands:[
+        {b:"Quechua / Forclaz", o:"FR", t:"val", w:"30–110 lei bucata, aluminiu. Perfect funcționale; blocarea prin răsucire alunecă la uzură.", nou:"30–220", sec:"25–80"},
+        {b:"Masters / Fizan", o:"IT", t:"val", w:"Italiene, foarte ușoare (Fizan Compact = 158 g bățul). Subestimate.", nou:"200–500", sec:"80–200"},
+        {b:"Komperdell", o:"AT", t:"", w:"Austriac, mecanisme fiabile. Se găsește destul de des second în RO.", nou:"300–800", sec:"100–300"},
+        {b:"Leki", o:"DE", t:"prem", w:"Referința. Sistem SpeedLock, mânere Aergon. OLX 100–280 lei pentru o pereche — cel mai bun deal din categorie.", nou:"400–2.400", sec:"100–300"},
+        {b:"Black Diamond", o:"US", t:"prem", w:"FlickLock, versiuni de carbon foarte ușoare. OLX mediana 300 lei.", nou:"855–1.850", sec:"200–500"}
+      ],
+      check:"Verifică trei lucruri: <b>sistemul de blocare</b> (cel cu clemă exterioară — FlickLock, SpeedLock — e mult mai fiabil decât cel prin răsucire, care alunecă exact când pui greutate pe el la coborâre), <b>segmentele să nu fie îndoite</b> (rotește-le, un băț strâmb nu intră complet), și vârfurile de carbură — se schimbă cu 15–30 de lei. Rondelele lipsă nu sunt o problemă."
+    },
+    { name:"Ochelari de soare", verdict:"care", where:["OLX","Vinted"],
+      brands:[
+        {b:"Decathlon (MH500/530)", o:"FR", t:"val", w:"Categoria 3 la 38–140 lei. Pentru munte fac exact ce trebuie.", nou:"38–140", sec:"20–60"},
+        {b:"Uvex / Alpina / Cébé", o:"DE / AT / FR", t:"", w:"Mărci de sport europene, lentile bune, prețuri rezonabile.", nou:"200–500", sec:"70–180"},
+        {b:"Julbo / Bollé", o:"FR", t:"prem", w:"Julbo e referința pentru munte înalt: lentile fotocromatice, protecție laterală.", nou:"400–1.200", sec:"120–400"}
+      ],
+      check:"Ochelarii second sunt riscanți pentru un motiv simplu: <b>zgârieturile pe lentilă nu se repară</b> și te obosesc la ochi toată ziua. Ține-i spre lumină și uită-te oblic. Verifică și marcajul de pe braț — trebuie să scrie categoria (3 pentru munte) și CE; ochelarii fără marcaj pot filtra prost UV chiar dacă sunt întunecați, ceea ce e mai rău decât să nu porți nimic."
+    },
+    { name:"Cuțit de buzunar", verdict:"no", where:["OLX","vechituri"],
+      brands:[
+        {b:"Opinel", o:"FR", t:"val", w:"40–80 lei nou. Lamă de carbon sau inox, mâner de lemn. Cuțitul clasic francez.", nou:"40–120", sec:"25–70"},
+        {b:"Mora", o:"SE", t:"val", w:"50–120 lei. Lama fixă cea mai bună pe leu din lume. Nu se pliază — verifică regulile de transport.", nou:"50–150", sec:"—"},
+        {b:"Victorinox", o:"CH", t:"", w:"110–140 lei nou, OLX mediana 130. <b>Nu are sens second</b> — același preț și riști contrafaceri.", nou:"110–200", sec:"—"},
+        {b:"Leatherman", o:"US", t:"prem", w:"Multitool cu clește. Garanție 25 de ani, care se onorează. Second 200–500 lei e o afacere reală.", nou:"400–1.000", sec:"200–500"}
+      ],
+      check:"La Victorinox și Opinel, diferența dintre nou și second e de 10–20 de lei — nu merită riscul. Piața e plină de copii chinezești de Victorinox: verifică crucea de pe scut (ștampilată, nu lipită) și inscripția pe lamă. La Leatherman second în schimb chiar economisești, și garanția de 25 de ani se aplică indiferent de cine l-a cumpărat."
+    },
+    { name:"Pernă, parazăpezi, husă de ploaie, dopuri", verdict:"care", where:["OLX"],
+      brands:[
+        {b:"Sea to Summit Aeros", o:"AU", t:"prem", w:"Perna gonflabilă de referință, 60–80 g. Second se găsește rar.", nou:"180–350", sec:"80–150"},
+        {b:"Trekmates / Salewa / Kamik", o:"UK / IT / CA", t:"", w:"Parazăpezi de trekking și iarnă. Verifică sistemul de prindere sub bocanc.", nou:"150–400", sec:"50–150"},
+        {b:"Deuter / Osprey / Sea to Summit", o:"DE / US / AU", t:"", w:"Huse de ploaie pentru rucsac, croite pe volum. Cele generice de 20 de lei fac același lucru.", nou:"60–180", sec:"25–60"},
+        {b:"Ohropax / Alpine", o:"DE / NL", t:"val", w:"Dopuri de urechi. <b>Nu se cumpără second, niciodată.</b>", nou:"15–60", sec:"—"}
+      ],
+      check:"Categoria „mărunțișuri”: aici second-hand îți economisește 30–100 de lei, deci merită doar dacă e la același vânzător de la care iei ceva mare. La pernele gonflabile aplică același test de 30 de minute ca la saltele. Dopurile de urechi și orice intră în corp se cumpără nou, indiferent de preț."
+    }
+  ]}
+  ];
+  var VERD = {yes:["v-yes","Second: da"], care:["v-care","Second: cu grijă"], no:["v-no","Second: nu"]};
+  var TIERC = {val:"t-val", prem:"t-prem", "":""};
+  var GROUP_OF = {
+    "rucsac":"Rucsac de drumeție", "frontala":"Frontală", "lopatica":"Lopățică",
+    "folie":"Folie de supraviețuire, cremă UV, igienă", "crema":"Folie de supraviețuire, cremă UV, igienă", "igiena":"Folie de supraviețuire, cremă UV, igienă",
+    "jacheta":"Jachetă și pantaloni de ploaie", "pantaloni-ploaie":"Jachetă și pantaloni de ploaie",
+    "polar":"Polar",
+    "bluza-corp":"Bluză și pantaloni de corp (merinos)", "pantaloni-corp":"Bluză și pantaloni de corp (merinos)",
+    "sosete":"Șosete, lenjerie, buff, căciulă", "lenjerie":"Șosete, lenjerie, buff, căciulă", "buff":"Șosete, lenjerie, buff, căciulă", "caciula":"Șosete, lenjerie, buff, căciulă",
+    "oala":"Oală, gamelă, tacâmuri", "tacamuri":"Oală, gamelă, tacâmuri",
+    "primus":"Arzător (primus)",
+    "apa":"Bidon, cană, prosop", "cana":"Bidon, cană, prosop", "prosop":"Bidon, cană, prosop",
+    "sac-dormit":"Sac de dormit", "izopren":"Izopren / saltea",
+    "cort":"Cort", "busola":"Busolă", "bricheta":"Brichetă și aprins focul", "fierastrau":"Fierăstrău de mână",
+    "coarda":"Coardă, carabiniere, chingi",
+    "bete":"Bețe de drumeție", "ochelari":"Ochelari de soare", "briceag":"Cuțit de buzunar",
+    "perna":"Pernă, parazăpezi, husă de ploaie, dopuri", "parazapezi":"Pernă, parazăpezi, husă de ploaie, dopuri",
+    "husa-rucsac":"Pernă, parazăpezi, husă de ploaie, dopuri", "dopuri":"Pernă, parazăpezi, husă de ploaie, dopuri"
+  };
+  var EXTRA = {
+    "biblie": {verdict:"yes", note:"Merge fără grijă second: anticariat, OLX sau împrumutată. Contează doar formatul — una mică, cu copertă flexibilă, e mult mai ușoară decât o ediție standard."},
+    "manusi": {verdict:"no", note:"N-am cercetat separat piața second pentru mănuși. La cele impermeabile, membrana și cusăturile lipite se uzează exact în palmă și la degete, iar variantele noi de mai sus pornesc de la 50 de lei — diferența nu merită riscul. Ia-le noi."},
+    "poncho": {verdict:"yes", note:"Un poncho e o folie impermeabilă cu glugă: nu are ce să se strice în afară de cusături și capse. Second e ok dacă nu e lipicios pe interior — același test ca la cort. Nou costă 40–110 lei la Decathlon."},
+    "spray-imperm": {verdict:"no", note:"Cumpără-l nou: la un spray început nu știi cât a mai rămas în el și cât de vechi e, iar unul nou pornește de la 25–40 de lei la Decathlon."},
+    "butelie": {verdict:"no", note:"Cartușul de gaz se cumpără întotdeauna nou: unul început sau vechi poate avea valva slăbită. Ia cartușe cu filet, compatibile cu arzătorul."}
+  };
+
+var NO_TIER = {
+  buget: "Nu există una mai ieftină care să merite.",
+  mediu: "Între cele două nu e nimic care să merite.",
+  premium: "Nu are rost să dai mai mult: varianta medie face aceeași treabă."
+};
+var TABS = [
+  {id:"mine", kinds:["req"]},
+  {id:"team", kinds:["team"]},
+  {id:"opt",  kinds:["opt"]}
+];
+var CAT_NAME = {personal:"Personal", imbracaminte:"Îmbrăcăminte", gatit:"Masă și gătit", dormit:"Dormit", echipa:"De echipă", optional:"Opțional"};
+
+var ITEM = {}, CAT_OF = {};
+DATA.forEach(function(c){ c.items.forEach(function(it){ ITEM[it.id] = it; CAT_OF[it.id] = c; }); });
+
+/* ---------- utilitare ---------- */
+function fmt(n){ return n.toLocaleString("ro-RO",{minimumFractionDigits:2, maximumFractionDigits:2}); }
+function fmt0(n){ return Math.round(n).toLocaleString("ro-RO"); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function lineTotal(v){ return v.price * (v.qty || 1); }
+function variant(it, t){ for(var i=0;i<it.variants.length;i++){ if(it.variants[i].tier === t) return it.variants[i]; } return null; }
+function forTier(it, t){
+  var i = TIERS.indexOf(t);
+  for(var j=i;j>=0;j--){ var v = variant(it, TIERS[j]); if(v) return v; }
+  return it.variants[0];
+}
+function minPrice(it){ return Math.min.apply(null, it.variants.map(lineTotal)); }
+function obj(x){ return x && typeof x === "object" && !Array.isArray(x) ? Object.assign({}, x) : {}; }
+function lsGet(k){ try{ var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+/* ---------- starea: bife, alegeri, notițe ---------- */
+var LS_KEY = "xcc-lista-v2", LS_OLD = "xcc-echipament-v1", LS_UI = "xcc-ui-v2";
+function clean(s){
+  var out = {done:{}, picks:{}, notes:{}};
+  var d = obj(s && s.done), p = obj(s && s.picks), n = obj(s && s.notes);
+  Object.keys(d).forEach(function(k){ if(ITEM[k]) out.done[k] = !!d[k]; });
+  Object.keys(p).forEach(function(k){ if(ITEM[k] && variant(ITEM[k], p[k])) out.picks[k] = p[k]; });
+  Object.keys(n).forEach(function(k){ if(ITEM[k] && typeof n[k] === "string" && n[k].trim()) out.notes[k] = n[k].slice(0,140); });
+  return out;
+}
+var state = clean(lsGet(LS_KEY));
+if(!lsGet(LS_KEY)){
+  var old = lsGet(LS_OLD);
+  if(old){
+    var od = obj(old.done);
+    Object.keys(od).forEach(function(k){ if(od[k] && ITEM[k] && !OWNED[k]) state.done[k] = true; });
+    state.picks = clean({picks:old.picks}).picks;
+  }
+}
+function isDone(id){ return Object.prototype.hasOwnProperty.call(state.done, id) ? state.done[id] : !!OWNED[id]; }
+function hasData(){ return Object.keys(state.done).length + Object.keys(state.picks).length + Object.keys(state.notes).length > 0; }
+
+var ui = obj(lsGet(LS_UI));
+if(!TABS.some(function(t){ return t.id === ui.tab; })) ui.tab = "mine";
+ui.only = !!ui.only;
+function saveUi(){ lsSet(LS_UI, {tab:ui.tab, only:ui.only, info:!!ui.info}); }
+
+var openId = null;
+var keep = {};   /* rânduri bifate acum, care rămân vizibile până schimbi filtrul */
+
+/* ---------- calcule ---------- */
+function tabOf(id){ return TABS.filter(function(t){ return t.id === id; })[0]; }
+function catsOf(tab){ return DATA.filter(function(c){ return tab.kinds.indexOf(c.kind) >= 0; }); }
+function itemsOf(tab){ var a = []; catsOf(tab).forEach(function(c){ a = a.concat(c.items); }); return a; }
+function stats(tab){
+  var items = itemsOf(tab), miss = items.filter(function(it){ return !isDone(it.id); });
+  var s = {total:items.length, done:items.length - miss.length, miss:miss.length, buget:0, mediu:0, premium:0, mine:0, pickedN:0};
+  miss.forEach(function(it){
+    TIERS.forEach(function(t){ s[t] += lineTotal(forTier(it, t)); });
+    var p = state.picks[it.id];
+    if(p){ s.mine += lineTotal(variant(it, p)); s.pickedN++; }
+  });
+  return s;
+}
+
+/* ---------- randare ---------- */
+var listEl = document.getElementById("list");
+
+function subHtml(it){
+  var h = '<span class="row-sub">';
+  if(!isDone(it.id)){
+    var p = state.picks[it.id], v = p && variant(it, p);
+    if(v) h += '<span class="tag tag-' + v.tier + '">' + TIER_LABEL[v.tier] + ' · <b>' + fmt(lineTotal(v)) + '</b> lei</span>';
+    else h += '<span class="from">de la ' + fmt(minPrice(it)) + ' lei</span>';
+  } else if(OWNED[it.id] && !Object.prototype.hasOwnProperty.call(state.done, it.id)){
+    h += '<span>îl ai deja</span>';
+  }
+  h += '</span>';
+  if(state.notes[it.id]) h += '<span class="row-note">' + esc(state.notes[it.id]) + '</span>';
+  return h;
+}
+
+function rowHtml(it){
+  var d = isDone(it.id), o = openId === it.id;
+  return '<div class="row' + (d ? " is-done" : "") + (o ? " is-open" : "") + '" id="r-' + it.id + '">' +
+    '<div class="row-main">' +
+      '<button type="button" class="chk" role="checkbox" aria-checked="' + d + '" data-chk="' + it.id + '" id="c-' + it.id + '" aria-label="' + esc(it.name) + ' — îl am">' +
+        '<span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l3 3 6-6.8"/></svg></span></button>' +
+      '<button type="button" class="row-open" data-open="' + it.id + '" id="o-' + it.id + '" aria-expanded="' + o + '" aria-controls="p-' + it.id + '">' +
+        '<span class="row-text"><span class="row-name">' + esc(it.name) + '</span><span class="row-subwrap" id="s-' + it.id + '">' + subHtml(it) + '</span></span>' +
+        '<svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>' +
+      '</button>' +
+    '</div>' +
+    '<div class="panel" id="p-' + it.id + '" role="region" aria-labelledby="o-' + it.id + '"' + (o ? "" : " hidden") + '>' + (o ? panelHtml(it) : "") + '</div>' +
+  '</div>';
+}
+
+function optHtml(it, t){
+  var v = variant(it, t);
+  if(!v) return '<div class="opt opt--none" data-tier="' + t + '"><span class="opt-tier">' + TIER_LABEL[t] + '</span><p>' + esc(NO_TIER[t]) + '</p></div>';
+  var p = state.picks[it.id] === t;
+  var h = '<div class="opt' + (p ? " is-picked" : "") + '" data-tier="' + t + '">';
+  h += '<div class="opt-top"><span class="opt-tier">' + TIER_LABEL[t] + '</span><span class="opt-shop">' + esc(v.shop) + '</span></div>';
+  h += '<p class="opt-name">' + esc(v.name) + '</p>';
+  h += '<p class="opt-price">' + fmt(lineTotal(v)) + ' <span class="u">lei</span>' + (v.qty > 1 ? '<span class="opt-qty">' + v.qty + ' × ' + fmt(v.price) + '</span>' : '') + '</p>';
+  if(v.parts && v.parts.length){
+    h += '<ul class="parts">' + v.parts.map(function(pt){
+      return '<li><a href="' + esc(pt.url) + '" target="_blank" rel="noopener noreferrer">' + esc(pt.name) + ' ↗</a><span>' + fmt(pt.price) + '</span></li>';
+    }).join("") + '</ul>';
+  }
+  h += '<p class="opt-desc">' + esc(v.desc) + '</p>';
+  h += '<div class="opt-act"><button type="button" class="pick" data-pick="' + it.id + '" data-t="' + t + '" id="k-' + it.id + '-' + t + '" aria-pressed="' + p + '">' + (p ? "Ales" : "Aleg") + '</button>';
+  h += (v.parts && v.parts.length) ? '<span class="go-n">linkurile sunt sus</span>' : '<a class="go" href="' + esc(v.url) + '" target="_blank" rel="noopener noreferrer">Deschide ↗</a>';
+  h += '</div></div>';
+  return h;
+}
+
+function adsHtml(it){
+  var h = '<div class="ads"><p class="sub-h">Noi pe Vinted și OLX · verificate pe ' + esc(it.adsDate || "") + '</p><ul class="ads-list">';
+  it.ads.forEach(function(a){
+    h += '<li class="ad' + (a.top ? " ad--top" : "") + '"><a class="ad-name" href="' + esc(a.url) + '" target="_blank" rel="noopener noreferrer"><span class="ad-src">' + esc(a.src) + '</span>' + esc(a.name) + ' ↗</a>';
+    h += '<span class="ad-price">' + esc(a.price) + '</span>';
+    h += '<p class="ad-meta">' + esc(a.meta) + '</p><p class="ad-note">' + (a.top ? "<b>Recomandat.</b> " : "") + esc(a.note) + '</p></li>';
+  });
+  h += '</ul>';
+  if(it.adsFoot) h += '<p class="ads-foot">' + esc(it.adsFoot) + '</p>';
+  return h + '</div>';
+}
+
+var GROUP_BY_NAME = {};
+MARKET.forEach(function(c){ c.groups.forEach(function(g){ GROUP_BY_NAME[g.name] = g; }); });
+function secRange(g){
+  var nums = [];
+  g.brands.forEach(function(b){ (String(b.sec).match(/\d[\d.]*/g) || []).forEach(function(x){ nums.push(parseFloat(x.replace(/\./g, ""))); }); });
+  if(!nums.length) return "";
+  return fmt0(Math.min.apply(null, nums)) + "–" + fmt0(Math.max.apply(null, nums)) + " lei";
+}
+function marketHtml(id){
+  var g = GROUP_BY_NAME[GROUP_OF[id]];
+  if(g){
+    var v = VERD[g.verdict], range = secRange(g);
+    var h = '<details class="sh"><summary><span class="verdict ' + v[0] + '">' + v[1] + '</span>';
+    h += '<span class="sh-sum">Branduri și second-hand · ' + g.brands.length + (g.brands.length === 1 ? " brand" : " branduri") + (range ? ' · second corect <b>' + range + '</b>' : '') + '</span>';
+    if(g.where && g.where.length) h += '<span class="where">' + g.where.map(function(w){ return '<span>' + esc(w) + '</span>'; }).join("") + '</span>';
+    h += '</summary><ul class="brands">';
+    g.brands.forEach(function(b){
+      h += '<li class="brand ' + (TIERC[b.t] || "") + '"><span class="b-name">' + esc(b.b) + (b.o && b.o !== "—" ? '<small>' + esc(b.o) + '</small>' : '') + '</span>';
+      h += '<span class="b-price">nou <b>' + esc(b.nou) + '</b></span><span class="b-price">second <b>' + esc(b.sec) + '</b></span>';
+      h += '<p class="b-what">' + b.w + '</p></li>';
+    });
+    h += '</ul><p class="sh-check">' + g.check + '</p></details>';
+    return h;
+  }
+  var x = EXTRA[id];
+  if(x){ var vv = VERD[x.verdict]; return '<p class="sh-note"><span class="verdict ' + vv[0] + '">' + vv[1] + '</span><span>' + esc(x.note) + '</span></p>'; }
+  return "";
+}
+
+function panelHtml(it){
+  var h = "";
+  if(it.note) h += '<p class="p-note">' + esc(it.note) + '</p>';
+  h += '<div class="opts">' + TIERS.map(function(t){ return optHtml(it, t); }).join("") + '</div>';
+  if(it.ads && it.ads.length) h += adsHtml(it);
+  h += marketHtml(it.id);
+  h += '<div class="mynote"><label for="n-' + it.id + '">Notița mea</label><input id="n-' + it.id + '" data-note="' + it.id + '" type="text" maxlength="140" autocomplete="off" placeholder="ex: îl cumpăr sâmbătă, îl împrumut, îmi caut" value="' + esc(state.notes[it.id] || "") + '"></div>';
+  return h;
+}
+
+function renderList(){
+  var tab = tabOf(ui.tab), h = "";
+  catsOf(tab).forEach(function(cat){
+    var items = cat.items;
+    var doneN = items.filter(function(it){ return isDone(it.id); }).length;
+    var shown = items.filter(function(it){ return !ui.only || !isDone(it.id) || keep[it.id]; });
+    h += '<section class="grp" id="g-' + cat.id + '"><div class="grp-head"><h2>' + esc(CAT_NAME[cat.id] || cat.title) + '</h2>';
+    h += '<span class="grp-n" id="gn-' + cat.id + '">' + doneN + '/' + items.length + '</span>';
+    if(cat.tag) h += '<span class="grp-tag">' + esc(cat.tag) + '</span>';
+    h += '</div>';
+    if(!shown.length) h += '<p class="grp-empty">Ai tot din grupul ăsta.</p>';
+    else h += '<div class="rows">' + shown.map(rowHtml).join("") + '</div>';
+    h += '</section>';
+  });
+  listEl.innerHTML = h;
+  if(openId && !document.getElementById("r-" + openId)) openId = null;
+  listEl.setAttribute("aria-labelledby", "tab-" + ui.tab);
+}
+
+function renderTabs(){
+  TABS.forEach(function(t){
+    var b = document.getElementById("tab-" + t.id), s = stats(t), n = document.getElementById("tn-" + t.id);
+    b.setAttribute("aria-selected", String(t.id === ui.tab));
+    n.textContent = s.miss ? s.miss : "✓";
+    n.className = "tab-n" + (s.miss ? " has-miss" : " is-zero");
+    n.setAttribute("aria-label", s.miss ? s.miss + " lipsesc" : "complet");
+  });
+}
+
+function renderSummary(){
+  var s = stats(tabOf(ui.tab));
+  var big = document.getElementById("s-big");
+  big.textContent = s.miss;
+  big.classList.toggle("is-zero", s.miss === 0);
+  document.getElementById("s-txt").textContent = (s.miss === 1 ? "lipsește" : "lipsesc") + " · " + s.done + " din " + s.total + " bifate";
+  document.getElementById("s-bar").style.width = (s.total ? Math.round(s.done / s.total * 100) : 0) + "%";
+  var cost = document.getElementById("s-cost");
+  if(s.miss){
+    cost.innerHTML = '<span class="lab">Ce lipsește costă</span>' +
+      '<span><span class="c-buget">buget</span> <b>' + fmt0(s.buget) + '</b></span>' +
+      '<span><span class="c-mediu">mediu</span> <b>' + fmt0(s.mediu) + '</b></span>' +
+      '<span><span class="c-premium">premium</span> <b>' + fmt0(s.premium) + '</b> lei</span>';
+  } else cost.textContent = "Nu mai ai nimic de cumpărat aici.";
+  var mine = document.getElementById("s-mine");
+  if(s.pickedN){
+    mine.hidden = false;
+    mine.innerHTML = 'Ce ai ales până acum: <b>' + fmt0(s.mine) + ' lei</b> pentru ' + s.pickedN + ' din ' + s.miss + (s.miss === 1 ? " poziție" : " poziții");
+  } else mine.hidden = true;
+  var only = document.getElementById("only");
+  only.setAttribute("aria-pressed", String(ui.only));
+}
+
+function renderAll(){ renderTabs(); renderSummary(); renderList(); }
+
+/* ---------- interacțiuni ---------- */
+function keepRowStill(row, fn){
+  var before = row ? row.getBoundingClientRect().top : 0;
+  fn();
+  if(row && row.isConnected){
+    var after = row.getBoundingClientRect().top;
+    if(Math.abs(after - before) > 0.5) window.scrollBy(0, after - before);
+  }
+}
+function setOpen(id, open){
+  var row = document.getElementById("r-" + id), p = document.getElementById("p-" + id), b = document.getElementById("o-" + id);
+  if(!row) return;
+  row.classList.toggle("is-open", open);
+  b.setAttribute("aria-expanded", String(open));
+  if(open){ p.innerHTML = panelHtml(ITEM[id]); p.hidden = false; }
+  else { p.hidden = true; p.innerHTML = ""; }
+}
+function toggleOpen(id){
+  var row = document.getElementById("r-" + id);
+  keepRowStill(row, function(){
+    if(openId && openId !== id) setOpen(openId, false);
+    if(openId === id){ setOpen(id, false); openId = null; }
+    else { setOpen(id, true); openId = id; }
+  });
+}
+function refreshRow(id){
+  var row = document.getElementById("r-" + id);
+  if(!row) return;
+  var d = isDone(id);
+  row.classList.toggle("is-done", d);
+  document.getElementById("c-" + id).setAttribute("aria-checked", String(d));
+  document.getElementById("s-" + id).innerHTML = subHtml(ITEM[id]);
+  var cat = CAT_OF[id], gn = document.getElementById("gn-" + cat.id);
+  if(gn) gn.textContent = cat.items.filter(function(it){ return isDone(it.id); }).length + "/" + cat.items.length;
+}
+function toggleDone(id){
+  state.done[id] = !isDone(id);
+  if(state.done[id] === !!OWNED[id]) delete state.done[id];
+  if(ui.only) keep[id] = true;
+  refreshRow(id); renderTabs(); renderSummary(); persist();
+}
+function togglePick(id, t){
+  if(state.picks[id] === t) delete state.picks[id]; else state.picks[id] = t;
+  var p = document.getElementById("p-" + id);
+  if(p) TIERS.forEach(function(tt){
+    var o = p.querySelector('.opt[data-tier="' + tt + '"]'), k = document.getElementById("k-" + id + "-" + tt);
+    var on = state.picks[id] === tt;
+    if(o) o.classList.toggle("is-picked", on);
+    if(k){ k.setAttribute("aria-pressed", String(on)); k.textContent = on ? "Ales" : "Aleg"; }
+  });
+  refreshRow(id); renderSummary(); persist();
+}
+
+listEl.addEventListener("click", function(e){
+  var t = e.target.closest("[data-chk],[data-open],[data-pick]");
+  if(!t) return;
+  if(t.hasAttribute("data-chk")) toggleDone(t.getAttribute("data-chk"));
+  else if(t.hasAttribute("data-open")) toggleOpen(t.getAttribute("data-open"));
+  else togglePick(t.getAttribute("data-pick"), t.getAttribute("data-t"));
+});
+var noteTimer = null;
+listEl.addEventListener("input", function(e){
+  var id = e.target.getAttribute && e.target.getAttribute("data-note");
+  if(!id) return;
+  var v = e.target.value.trim();
+  if(v) state.notes[id] = v.slice(0,140); else delete state.notes[id];
+  document.getElementById("s-" + id).innerHTML = subHtml(ITEM[id]);
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(persist, 700);
+});
+listEl.addEventListener("focusout", function(e){
+  if(e.target.getAttribute && e.target.getAttribute("data-note") && noteTimer){ clearTimeout(noteTimer); noteTimer = null; persist(); }
+  setTimeout(function(){ if(pendingRemote && !listEl.contains(document.activeElement)){ pendingRemote = false; applyRemote(); } }, 0);
+});
+
+document.querySelector(".tabs").addEventListener("click", function(e){
+  var b = e.target.closest("[data-tab]");
+  if(!b || b.getAttribute("data-tab") === ui.tab) return;
+  ui.tab = b.getAttribute("data-tab"); openId = null; keep = {};
+  saveUi(); renderAll();
+});
+document.querySelector(".tabs").addEventListener("keydown", function(e){
+  if(e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  var i = TABS.map(function(t){ return t.id; }).indexOf(ui.tab);
+  i = (i + (e.key === "ArrowRight" ? 1 : TABS.length - 1)) % TABS.length;
+  ui.tab = TABS[i].id; openId = null; keep = {};
+  saveUi(); renderAll(); document.getElementById("tab-" + ui.tab).focus();
+});
+document.getElementById("only").addEventListener("click", function(){
+  ui.only = !ui.only; keep = {};
+  if(ui.only && openId && isDone(openId)) openId = null;
+  saveUi(); renderSummary(); renderList();
+});
+
+var infoEl = document.getElementById("info");
+if(ui.info) infoEl.open = true;
+infoEl.addEventListener("toggle", function(){ ui.info = infoEl.open; saveUi(); });
+
+document.getElementById("notes").innerHTML = NOTES.map(function(n){ return "<li>" + esc(n) + "</li>"; }).join("");
+
+/* ---------- salvare: Supabase după login, browserul ca rezervă ---------- */
+var SUPABASE_URL = "https://rxlvmvklebczgtzbmbct.supabase.co";
+var SUPABASE_KEY = "sb_publishable_hXie_GXygm8Q9PCmyU55UQ_b5q8FZ7R";
+var TABLE = "xcc_state";
+
+var syncEl = document.getElementById("sync");
+var loginEl = document.getElementById("login");
+var emailEl = document.getElementById("em");
+var sendEl = document.getElementById("send");
+var outEl = document.getElementById("logout");
+
+function setSync(s, txt){ syncEl.setAttribute("data-s", s); syncEl.textContent = txt; }
+
+var sb = null, uid = null, userEmail = "", writing = false, dirty = false, wTimer = null;
+var configured = SUPABASE_URL.indexOf("__") !== 0 && SUPABASE_KEY.indexOf("__") !== 0;
+if(configured && window.supabase && typeof window.supabase.createClient === "function"){
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {flowType: "implicit", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true}
+  });
+}
+
+function persist(){
+  lsSet(LS_KEY, state);
+  if(!sb || !uid) return;
+  dirty = true; setSync("saving", "Se salvează…");
+  clearTimeout(wTimer); wTimer = setTimeout(flush, 600);
+}
+function flush(){
+  if(!sb || !uid || writing || !dirty) return Promise.resolve();
+  writing = true; dirty = false;
+  var row = {user_id: uid, done: state.done, picks: state.picks, notes: state.notes, updated_at: new Date().toISOString()};
+  return sb.from(TABLE).upsert(row).then(function(res){
+    writing = false;
+    if(res.error){ dirty = true; setSync("err", "Nu s-a salvat în cont (" + res.error.message + "). Rămâne în browser; reîncerc la următoarea modificare."); return; }
+    if(dirty) return flush();
+    setSync("ok", "Salvat în cont · " + userEmail);
+  }, function(){
+    writing = false; dirty = true;
+    setSync("err", "Fără conexiune. Rămâne în browser; reîncerc la următoarea modificare.");
+  });
+}
+function pull(){
+  if(!sb || !uid) return Promise.resolve();
+  return sb.from(TABLE).select("done,picks,notes").eq("user_id", uid).maybeSingle().then(function(res){
+    if(res.error){ setSync("err", "Nu pot citi din cont (" + res.error.message + ")."); return; }
+    if(!res.data){
+      /* prima intrare: urc ce ai deja în browser */
+      dirty = true; return flush();
+    }
+    if(dirty || writing) return;
+    state = clean(res.data); lsSet(LS_KEY, state);
+    if(listEl.contains(document.activeElement) && document.activeElement.tagName === "INPUT"){ pendingRemote = true; remoteData = res.data; }
+    else { renderTabs(); renderSummary(); renderList(); }
+    setSync("ok", "Salvat în cont · " + userEmail);
+  });
+}
+var pendingRemote = false, remoteData = null;
+function applyRemote(){ if(remoteData){ state = clean(remoteData); remoteData = null; renderTabs(); renderSummary(); renderList(); } }
+
+function showSignedOut(msg){
+  uid = null; userEmail = "";
+  loginEl.hidden = !sb; outEl.hidden = true;
+  if(!sb){ setSync("local", configured ? "Nu se poate conecta la baza de date. Bifele rămân în acest browser." : "Salvat în acest browser"); return; }
+  setSync("local", msg || "Salvat doar în acest browser. Intră în cont ca să le ai și pe telefon.");
+}
+function handleSession(session){
+  if(!session || !session.user){ showSignedOut(); return; }
+  if(uid === session.user.id) return;
+  uid = session.user.id; userEmail = session.user.email || "";
+  loginEl.hidden = true; outEl.hidden = false;
+  setSync("saving", "Se încarcă din cont…");
+  pull();
+}
+
+if(sb){
+  sb.auth.onAuthStateChange(function(event, session){
+    /* fără apeluri Supabase direct din callback: le amân un tick */
+    setTimeout(function(){ handleSession(session); }, 0);
+  });
+  loginEl.addEventListener("submit", function(e){
+    e.preventDefault();
+    var email = emailEl.value.trim();
+    if(!email) return;
+    sendEl.disabled = true; sendEl.textContent = "Se trimite…";
+    sb.auth.signInWithOtp({email: email, options: {emailRedirectTo: location.origin + location.pathname}}).then(function(res){
+      sendEl.disabled = false; sendEl.textContent = "Trimite link de intrare";
+      if(res.error){ setSync("err", "Nu am putut trimite linkul: " + res.error.message); return; }
+      setSync("saving", "Ți-am trimis un link pe " + email + ". Deschide-l pe orice dispozitiv ca să intri.");
+    });
+  });
+  outEl.addEventListener("click", function(){
+    sb.auth.signOut().then(function(){ showSignedOut("Ai ieșit din cont. Bifele rămân și în acest browser."); });
+  });
+  document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState === "visible" && uid && !dirty && !writing) pull();
+  });
+} else {
+  showSignedOut();
+}
+
+renderAll();
+})();
+</script>
+</body>
+</html>
