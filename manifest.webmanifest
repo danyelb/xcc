@@ -1,0 +1,18 @@
+{
+  "name": "Echipament XCC",
+  "short_name": "XCC",
+  "description": "Lista de echipament pentru XCC, cu bife, alegeri, notițe și etichete. Merge și fără internet.",
+  "lang": "ro",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0f0e",
+  "theme_color": "#0d0f0e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

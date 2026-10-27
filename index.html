@@ -2,12 +2,21 @@
 <html lang="ro">
 <head>
 <meta charset="utf-8">
+<title>Echipament XCC</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f0e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f1f2ee" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="XCC">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Echipament XCC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -152,6 +161,7 @@ h1{
 .btn:hover{border-color:var(--ink-2)}
 .btn:disabled{opacity:.6;cursor:default}
 .linkbtn{justify-self:start;background:none;border:0;padding:0;color:var(--muted);font-size:.85rem;text-decoration:underline;cursor:pointer}
+.install{justify-self:start}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- grupuri și rânduri ---------- */
@@ -408,6 +418,7 @@ h1{
         <button type="submit" class="btn" id="send">Trimite link de intrare</button>
       </form>
       <button type="button" class="linkbtn" id="logout" hidden>Ieși din cont</button>
+      <button type="button" class="btn install" id="install" hidden>Instalează aplicația pe acest dispozitiv</button>
     </div>
   </section>
 
@@ -1424,6 +1435,7 @@ document.getElementById("notes").innerHTML = NOTES.map(function(n){ return "<li>
 var SUPABASE_URL = "https://rxlvmvklebczgtzbmbct.supabase.co";
 var SUPABASE_KEY = "sb_publishable_hXie_GXygm8Q9PCmyU55UQ_b5q8FZ7R";
 var TABLE = "xcc_state";
+var LS_PENDING = "xcc-nesincronizat-v1";   /* id-ul contului care are modificări netrimise (făcute offline) */
 
 var syncEl = document.getElementById("sync");
 var loginEl = document.getElementById("login");
@@ -1432,6 +1444,12 @@ var sendEl = document.getElementById("send");
 var outEl = document.getElementById("logout");
 
 function setSync(s, txt){ syncEl.setAttribute("data-s", s); syncEl.textContent = txt; }
+function isOffline(err){
+  if(navigator.onLine === false) return true;
+  var m = String(err && (err.message || err) || "");
+  return /Failed to fetch|NetworkError|Load failed|network/i.test(m);
+}
+var OFFLINE_TXT = "Fără internet · ce bifezi rămâne pe telefon și se trimite în cont când revine netul.";
 
 var sb = null, uid = null, userEmail = "", writing = false, dirty = false, wTimer = null;
 var configured = SUPABASE_URL.indexOf("__") !== 0 && SUPABASE_KEY.indexOf("__") !== 0;
@@ -1441,30 +1459,48 @@ if(configured && window.supabase && typeof window.supabase.createClient === "fun
   });
 }
 
+function pendingFor(id){ return !!id && lsGet(LS_PENDING) === id; }
+function setPending(on){ try{ if(on && uid) localStorage.setItem(LS_PENDING, JSON.stringify(uid)); else localStorage.removeItem(LS_PENDING); }catch(e){} }
+
 function persist(){
   lsSet(LS_KEY, state);
   if(!sb || !uid) return;
-  dirty = true; setSync("saving", "Se salvează…");
+  dirty = true; setPending(true);
+  setSync("saving", navigator.onLine === false ? OFFLINE_TXT : "Se salvează…");
   clearTimeout(wTimer); wTimer = setTimeout(flush, 600);
 }
 function flush(){
   if(!sb || !uid || writing || !dirty) return Promise.resolve();
+  if(navigator.onLine === false){ setSync("local", OFFLINE_TXT); return Promise.resolve(); }
   writing = true; dirty = false;
   var row = {user_id: uid, done: state.done, picks: state.picks, notes: state.notes, labels: state.labels, updated_at: new Date().toISOString()};
   return sb.from(TABLE).upsert(row).then(function(res){
     writing = false;
-    if(res.error){ dirty = true; setSync("err", "Nu s-a salvat în cont (" + res.error.message + "). Rămâne în browser; reîncerc la următoarea modificare."); return; }
+    if(res.error){
+      dirty = true;
+      if(isOffline(res.error)) setSync("local", OFFLINE_TXT);
+      else setSync("err", "Nu s-a salvat în cont (" + res.error.message + "). Rămâne pe acest dispozitiv; reîncerc la următoarea modificare.");
+      return;
+    }
     if(dirty) return flush();
+    setPending(false);
     setSync("ok", "Salvat în cont · " + userEmail);
-  }, function(){
+  }, function(err){
     writing = false; dirty = true;
-    setSync("err", "Fără conexiune. Rămâne în browser; reîncerc la următoarea modificare.");
+    setSync("local", isOffline(err) ? OFFLINE_TXT : "Nu am putut salva în cont. Rămâne pe acest dispozitiv; reîncerc la următoarea modificare.");
   });
 }
 function pull(){
   if(!sb || !uid) return Promise.resolve();
+  /* modificările făcute offline au prioritate: le trimit în loc să citesc varianta veche din cont */
+  if(pendingFor(uid)){ dirty = true; return flush(); }
+  if(navigator.onLine === false){ setSync("local", OFFLINE_TXT); return Promise.resolve(); }
   return sb.from(TABLE).select("done,picks,notes,labels").eq("user_id", uid).maybeSingle().then(function(res){
-    if(res.error){ setSync("err", "Nu pot citi din cont (" + res.error.message + ")."); return; }
+    if(res.error){
+      if(isOffline(res.error)) setSync("local", OFFLINE_TXT);
+      else setSync("err", "Nu pot citi din cont (" + res.error.message + ").");
+      return;
+    }
     if(!res.data){
       /* prima intrare: întâi datele pregătite pentru emailul tău, altfel ce ai bifat în browser */
       return sb.rpc("xcc_claim_seed").then(function(r){
@@ -1478,11 +1514,13 @@ function pull(){
         dirty = true; return flush();
       });
     }
-    if(dirty || writing) return;
+    if(dirty || writing || pendingFor(uid)) return;
     state = clean(res.data); lsSet(LS_KEY, state);
     if(listEl.contains(document.activeElement) && document.activeElement.tagName === "INPUT"){ pendingRemote = true; remoteData = res.data; }
     else { renderTabs(); renderSummary(); renderList(); }
     setSync("ok", "Salvat în cont · " + userEmail);
+  }, function(err){
+    setSync("local", isOffline(err) ? OFFLINE_TXT : "Nu pot citi din cont acum.");
   });
 }
 var pendingRemote = false, remoteData = null;
@@ -1491,7 +1529,7 @@ function applyRemote(){ if(remoteData){ state = clean(remoteData); remoteData = 
 function showSignedOut(msg){
   uid = null; userEmail = "";
   loginEl.hidden = !sb; outEl.hidden = true;
-  if(!sb){ setSync("local", configured ? "Nu se poate conecta la baza de date. Bifele rămân în acest browser." : "Salvat în acest browser"); return; }
+  if(!sb){ setSync("local", configured ? "Nu se poate conecta la baza de date. Bifele rămân pe acest dispozitiv." : "Salvat în acest browser"); return; }
   setSync("local", msg || "Salvat doar în acest browser. Intră în cont ca să le ai și pe telefon.");
 }
 var signingOut = false;
@@ -1513,6 +1551,7 @@ if(sb){
     e.preventDefault();
     var email = emailEl.value.trim();
     if(!email) return;
+    if(navigator.onLine === false){ setSync("err", "Pentru intrarea în cont ai nevoie de internet."); return; }
     sendEl.disabled = true; sendEl.textContent = "Se trimite…";
     sb.auth.signInWithOtp({email: email, options: {emailRedirectTo: location.origin + location.pathname}}).then(function(res){
       sendEl.disabled = false; sendEl.textContent = "Trimite link de intrare";
@@ -1521,10 +1560,11 @@ if(sb){
     });
   });
   outEl.addEventListener("click", function(){
+    if(pendingFor(uid) && !window.confirm("Ai modificări făcute fără internet care nu au ajuns încă în cont. Dacă ieși acum, le pierzi de pe acest dispozitiv. Ieși oricum?")) return;
     signingOut = true;
     sb.auth.signOut().then(function(){
       /* bifele tale rămân în cont; pe acest dispozitiv lista revine la varianta generală */
-      clearTimeout(wTimer); dirty = false;
+      clearTimeout(wTimer); dirty = false; setPending(false);
       state = clean(null); lsSet(LS_KEY, state);
       openId = null; keep = {};
       renderTabs(); renderSummary(); renderList();
@@ -1532,11 +1572,32 @@ if(sb){
     });
   });
   document.addEventListener("visibilitychange", function(){
-    if(document.visibilityState === "visible" && uid && !dirty && !writing) pull();
+    if(document.visibilityState === "visible" && uid && !writing){ if(dirty) flush(); else pull(); }
   });
+  window.addEventListener("online", function(){
+    if(!uid) return;
+    setSync("saving", "A revenit netul · sincronizez…");
+    if(dirty || pendingFor(uid)){ dirty = true; flush(); } else pull();
+  });
+  window.addEventListener("offline", function(){ if(uid) setSync("local", OFFLINE_TXT); });
 } else {
   showSignedOut();
 }
+
+/* ---------- aplicație instalabilă, care merge și fără internet ---------- */
+if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")){
+  window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+}
+var installEl = document.getElementById("install"), installEvt = null;
+window.addEventListener("beforeinstallprompt", function(e){
+  e.preventDefault(); installEvt = e; installEl.hidden = false;
+});
+installEl.addEventListener("click", function(){
+  if(!installEvt) return;
+  installEvt.prompt();
+  installEvt.userChoice.then(function(){ installEvt = null; installEl.hidden = true; }, function(){ installEl.hidden = true; });
+});
+window.addEventListener("appinstalled", function(){ installEvt = null; installEl.hidden = true; });
 
 renderAll();
 })();
