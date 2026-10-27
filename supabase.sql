@@ -1,4 +1,4 @@
--- Lista XCC: un rând per utilizator, cu bifele, alegerile și notițele.
+-- Lista XCC: un rând per utilizator, cu bifele, alegerile, notițele și etichetele.
 -- Fiecare vede și modifică doar rândul lui (Row Level Security).
 
 create table if not exists public.xcc_state (
@@ -6,8 +6,13 @@ create table if not exists public.xcc_state (
   done       jsonb not null default '{}'::jsonb,
   picks      jsonb not null default '{}'::jsonb,
   notes      jsonb not null default '{}'::jsonb,
+  labels     jsonb not null default '{}'::jsonb check (jsonb_typeof(labels) = 'object'),
   updated_at timestamptz not null default now()
 );
+
+-- pentru tabelele create înainte de etichete
+alter table public.xcc_state
+  add column if not exists labels jsonb not null default '{}'::jsonb;
 
 alter table public.xcc_state enable row level security;
 

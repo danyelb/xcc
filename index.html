@@ -33,6 +33,7 @@
   --pill-bg:#eef1ec;
   --pill-ink:#0d0f0e;
   --focus:#9fd0ff;
+  --l0:#c9a3ee; --l1:#f294bb; --l2:#62cfcf; --l3:#e9c75e; --l4:#a9b3f7; --l5:#bccb8c;
   --f-display:"Oswald","Arial Narrow",Impact,sans-serif;
   --f-body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -46,6 +47,7 @@
     --accent:#2c7a53; --accent-ink:#1f6444; --miss:#d2402f;
     --t-buget:#2c7a53; --t-mediu:#2f5f86; --t-premium:#b4561c; --warn:#9a6a00;
     --pill-bg:#141715; --pill-ink:#f1f2ee; --focus:#1f6fd6;
+    --l0:#7a3cae; --l1:#ad2f67; --l2:#11706f; --l3:#7d5a00; --l4:#3c4cb2; --l5:#566419;
   }
 }
 :root[data-theme="light"]{
@@ -55,6 +57,7 @@
   --accent:#2c7a53; --accent-ink:#1f6444; --miss:#d2402f;
   --t-buget:#2c7a53; --t-mediu:#2f5f86; --t-premium:#b4561c; --warn:#9a6a00;
   --pill-bg:#141715; --pill-ink:#f1f2ee; --focus:#1f6fd6;
+  --l0:#7a3cae; --l1:#ad2f67; --l2:#11706f; --l3:#7d5a00; --l4:#3c4cb2; --l5:#566419;
 }
 
 html{font-size:14px}
@@ -198,6 +201,19 @@ h1{
 .tag-mediu{color:var(--t-mediu);background:color-mix(in srgb, var(--t-mediu) 16%, transparent)}
 .tag-premium{color:var(--t-premium);background:color-mix(in srgb, var(--t-premium) 16%, transparent)}
 .tag b{font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* etichetele tale: mici, colțuri drepte, ca să nu se confunde cu prețul */
+.lbls{display:inline-flex;flex-wrap:wrap;gap:4px}
+.lbl{
+  --lc:var(--l0);
+  display:inline-flex;align-items:center;gap:2px;max-width:100%;
+  font-size:.72rem;font-weight:600;line-height:1.25;padding:1px 6px;border-radius:5px;
+  color:var(--lc);background:color-mix(in srgb, var(--lc) 13%, transparent);
+  border:1px solid color-mix(in srgb, var(--lc) 34%, transparent);
+  overflow-wrap:anywhere;
+}
+.lc1{--lc:var(--l1)} .lc2{--lc:var(--l2)} .lc3{--lc:var(--l3)} .lc4{--lc:var(--l4)} .lc5{--lc:var(--l5)}
+.row.is-done .lbl{opacity:.75}
 .chev{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
 .row.is-open .chev{transform:rotate(180deg);stroke:var(--ink)}
 .row-open:hover .row-name{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
@@ -287,6 +303,32 @@ h1{
 }
 .mynote input::placeholder{color:var(--muted)}
 
+.lbl-ed{display:grid;gap:8px;min-width:0}
+.lbl-ed>label{font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lbl-cur{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lbl-cur .lbl{font-size:.82rem;padding:2px 3px 2px 8px}
+.lbl-x{
+  display:grid;place-items:center;width:22px;height:22px;margin:-2px 0;border:0;border-radius:4px;
+  background:none;color:inherit;cursor:pointer;font-size:1rem;line-height:1;
+}
+.lbl-x:hover{background:color-mix(in srgb, var(--lc) 22%, transparent)}
+.lbl-none{font-size:.86rem;color:var(--muted)}
+.lbl-add{display:flex;gap:8px}
+.lbl-add input{
+  flex:1 1 0;width:0;min-width:0;font:inherit;font-size:max(16px, .95rem);color:var(--ink);background:var(--surface);
+  border:1px solid var(--line);border-radius:10px;padding:8px 12px;
+}
+.lbl-add input::placeholder{color:var(--muted)}
+.lbl-btn{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 14px;font-weight:600;font-size:.9rem;cursor:pointer}
+.lbl-btn:hover{border-color:var(--ink-2)}
+.lbl-sug{display:flex;flex-wrap:wrap;gap:6px}
+.lbl-s{
+  border:1px dashed var(--line);background:transparent;color:var(--ink-2);border-radius:5px;
+  padding:3px 9px;font-size:.82rem;cursor:pointer;
+}
+.lbl-s:hover{border-style:solid;border-color:var(--ink-2);color:var(--ink)}
+.lbl-s::before{content:"+ ";color:var(--muted)}
+
 /* ---------- greutate și vreme ---------- */
 .info{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
 .info>summary{
@@ -355,7 +397,7 @@ h1{
     <p class="cost" id="s-cost"></p>
     <p class="mine" id="s-mine" hidden></p>
     <div class="sum-foot">
-      <p class="hint">Apasă pe un rând ca să vezi variantele chiar sub el. Bifează ce ai deja.</p>
+      <p class="hint">Apasă pe un rând ca să vezi variantele chiar sub el și să-i pui etichete. Bifează ce ai deja.</p>
       <button type="button" class="pill" id="only" aria-pressed="false">Doar ce-mi lipsește</button>
     </div>
     <div class="acct">
@@ -968,14 +1010,26 @@ function obj(x){ return x && typeof x === "object" && !Array.isArray(x) ? Object
 function lsGet(k){ try{ var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
 function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 
-/* ---------- starea: bife, alegeri, notițe ---------- */
+/* ---------- starea: bife, alegeri, notițe, etichete ---------- */
 var LS_KEY = "xcc-lista-v2", LS_OLD = "xcc-echipament-v1", LS_UI = "xcc-ui-v2";
+var LBL_MAX = 30, LBL_PER = 8;
+var LBL_SUGGEST = ["de cumpărat", "comandat", "împrumut", "Vinted", "de verificat", "de la organizatori"];
+function normLbl(s){ return typeof s === "string" ? s.replace(/\s+/g, " ").trim().slice(0, LBL_MAX) : ""; }
+function cleanLbls(a){
+  var out = [], seen = {};
+  (Array.isArray(a) ? a : []).forEach(function(x){
+    var v = normLbl(x), k = v.toLowerCase();
+    if(v && !seen[k] && out.length < LBL_PER){ seen[k] = true; out.push(v); }
+  });
+  return out;
+}
 function clean(s){
-  var out = {done:{}, picks:{}, notes:{}};
-  var d = obj(s && s.done), p = obj(s && s.picks), n = obj(s && s.notes);
+  var out = {done:{}, picks:{}, notes:{}, labels:{}};
+  var d = obj(s && s.done), p = obj(s && s.picks), n = obj(s && s.notes), l = obj(s && s.labels);
   Object.keys(d).forEach(function(k){ if(ITEM[k]) out.done[k] = !!d[k]; });
   Object.keys(p).forEach(function(k){ if(ITEM[k] && variant(ITEM[k], p[k])) out.picks[k] = p[k]; });
   Object.keys(n).forEach(function(k){ if(ITEM[k] && typeof n[k] === "string" && n[k].trim()) out.notes[k] = n[k].slice(0,140); });
+  Object.keys(l).forEach(function(k){ if(ITEM[k]){ var a = cleanLbls(l[k]); if(a.length) out.labels[k] = a; } });
   return out;
 }
 var state = clean(lsGet(LS_KEY));
@@ -988,7 +1042,7 @@ if(!lsGet(LS_KEY)){
   }
 }
 function isDone(id){ return Object.prototype.hasOwnProperty.call(state.done, id) ? state.done[id] : !!OWNED[id]; }
-function hasData(){ return Object.keys(state.done).length + Object.keys(state.picks).length + Object.keys(state.notes).length > 0; }
+function hasData(){ return Object.keys(state.done).length + Object.keys(state.picks).length + Object.keys(state.notes).length + Object.keys(state.labels).length > 0; }
 
 var ui = obj(lsGet(LS_UI));
 if(!TABS.some(function(t){ return t.id === ui.tab; })) ui.tab = "mine";
@@ -1016,8 +1070,19 @@ function stats(tab){
 /* ---------- randare ---------- */
 var listEl = document.getElementById("list");
 
+function lblClass(s){
+  var k = s.toLowerCase(), h = 0;
+  for(var i = 0; i < k.length; i++){ h = (h * 31 + k.charCodeAt(i)) >>> 0; }
+  return "lbl lc" + (h % 6);
+}
+function lblsHtml(id){
+  var a = state.labels[id];
+  if(!a || !a.length) return "";
+  return '<span class="lbls">' + a.map(function(s){ return '<span class="' + lblClass(s) + '">' + esc(s) + '</span>'; }).join("") + '</span>';
+}
+
 function subHtml(it){
-  var h = '<span class="row-sub">';
+  var h = '<span class="row-sub">' + lblsHtml(it.id);
   if(!isDone(it.id)){
     var p = state.picks[it.id], v = p && variant(it, p);
     if(v) h += '<span class="tag tag-' + v.tier + '">' + TIER_LABEL[v.tier] + ' · <b>' + fmt(lineTotal(v)) + '</b> lei</span>';
@@ -1106,12 +1171,47 @@ function marketHtml(id){
   return "";
 }
 
+/* editorul de etichete din panou */
+function usedLbls(){
+  var seen = {}, out = [];
+  LBL_SUGGEST.concat.apply(LBL_SUGGEST, Object.keys(state.labels).map(function(k){ return state.labels[k]; })).forEach(function(s){
+    var k = s.toLowerCase();
+    if(!seen[k]){ seen[k] = true; out.push(s); }
+  });
+  return out;
+}
+function lblCurHtml(id){
+  var a = state.labels[id] || [];
+  if(!a.length) return '<span class="lbl-none">Nicio etichetă încă.</span>';
+  return a.map(function(s, i){
+    return '<span class="' + lblClass(s) + '">' + esc(s) +
+      '<button type="button" class="lbl-x" data-lbl-del="' + id + '" data-i="' + i + '" aria-label="Șterge eticheta ' + esc(s) + '">×</button></span>';
+  }).join("");
+}
+function lblSugHtml(id){
+  var mine = {};
+  (state.labels[id] || []).forEach(function(s){ mine[s.toLowerCase()] = true; });
+  if((state.labels[id] || []).length >= LBL_PER) return "";
+  return usedLbls().filter(function(s){ return !mine[s.toLowerCase()]; }).slice(0, 14).map(function(s){
+    return '<button type="button" class="lbl-s" data-lbl-sug="' + id + '" data-v="' + esc(s) + '" aria-label="Adaugă eticheta ' + esc(s) + '">' + esc(s) + '</button>';
+  }).join("");
+}
+function lblEdHtml(it){
+  var id = it.id;
+  return '<div class="lbl-ed"><label for="li-' + id + '">Etichete</label>' +
+    '<div class="lbl-cur" id="lc-' + id + '">' + lblCurHtml(id) + '</div>' +
+    '<div class="lbl-add"><input id="li-' + id + '" data-lbl-in="' + id + '" type="text" maxlength="' + LBL_MAX + '" autocomplete="off" enterkeyhint="done" placeholder="etichetă nouă, ex: comandat">' +
+    '<button type="button" class="lbl-btn" data-lbl-add="' + id + '">Adaugă</button></div>' +
+    '<div class="lbl-sug" id="ls-' + id + '">' + lblSugHtml(id) + '</div></div>';
+}
+
 function panelHtml(it){
   var h = "";
   if(it.note) h += '<p class="p-note">' + esc(it.note) + '</p>';
   h += '<div class="opts">' + TIERS.map(function(t){ return optHtml(it, t); }).join("") + '</div>';
   if(it.ads && it.ads.length) h += adsHtml(it);
   h += marketHtml(it.id);
+  h += lblEdHtml(it);
   h += '<div class="mynote"><label for="n-' + it.id + '">Notița mea</label><input id="n-' + it.id + '" data-note="' + it.id + '" type="text" maxlength="140" autocomplete="off" placeholder="ex: îl cumpăr sâmbătă, îl împrumut, îmi caut" value="' + esc(state.notes[it.id] || "") + '"></div>';
   return h;
 }
@@ -1223,12 +1323,62 @@ function togglePick(id, t){
   refreshRow(id); renderSummary(); persist();
 }
 
+function refreshLbls(id){
+  var c = document.getElementById("lc-" + id), s = document.getElementById("ls-" + id), sub = document.getElementById("s-" + id);
+  if(c) c.innerHTML = lblCurHtml(id);
+  if(s) s.innerHTML = lblSugHtml(id);
+  if(sub) sub.innerHTML = subHtml(ITEM[id]);
+}
+function addLabel(id, raw){
+  var v = normLbl(raw);
+  if(!v || !ITEM[id]) return false;
+  var a = (state.labels[id] || []).slice();
+  if(a.some(function(x){ return x.toLowerCase() === v.toLowerCase(); })) return true;
+  if(a.length >= LBL_PER) return false;
+  a.push(v);
+  state.labels[id] = a;
+  refreshLbls(id); persist();
+  return true;
+}
+function delLabel(id, i){
+  var a = (state.labels[id] || []).slice();
+  if(i < 0 || i >= a.length) return;
+  a.splice(i, 1);
+  if(a.length) state.labels[id] = a; else delete state.labels[id];
+  refreshLbls(id); persist();
+}
+/* după ce butonul apăsat dispare, mut focusul pe câmp doar la tastatură (pe telefon nu deschid tastatura degeaba) */
+function focusLblInput(id, kb){
+  var inp = document.getElementById("li-" + id);
+  if(inp && kb) inp.focus();
+}
+function addFromInput(id){
+  var inp = document.getElementById("li-" + id);
+  if(!inp) return;
+  if(!normLbl(inp.value) || addLabel(id, inp.value)) inp.value = "";
+}
+
 listEl.addEventListener("click", function(e){
-  var t = e.target.closest("[data-chk],[data-open],[data-pick]");
+  var t = e.target.closest("[data-chk],[data-open],[data-pick],[data-lbl-del],[data-lbl-add],[data-lbl-sug]");
   if(!t) return;
   if(t.hasAttribute("data-chk")) toggleDone(t.getAttribute("data-chk"));
   else if(t.hasAttribute("data-open")) toggleOpen(t.getAttribute("data-open"));
-  else togglePick(t.getAttribute("data-pick"), t.getAttribute("data-t"));
+  else if(t.hasAttribute("data-pick")) togglePick(t.getAttribute("data-pick"), t.getAttribute("data-t"));
+  else if(t.hasAttribute("data-lbl-del")){
+    var did = t.getAttribute("data-lbl-del");
+    delLabel(did, parseInt(t.getAttribute("data-i"), 10)); focusLblInput(did, e.detail === 0);
+  }
+  else if(t.hasAttribute("data-lbl-add")) addFromInput(t.getAttribute("data-lbl-add"));
+  else {
+    var sid = t.getAttribute("data-lbl-sug");
+    addLabel(sid, t.getAttribute("data-v")); focusLblInput(sid, e.detail === 0);
+  }
+});
+listEl.addEventListener("keydown", function(e){
+  var id = e.target.getAttribute && e.target.getAttribute("data-lbl-in");
+  if(!id || e.key !== "Enter" || e.isComposing) return;
+  e.preventDefault();
+  addFromInput(id);
 });
 var noteTimer = null;
 listEl.addEventListener("input", function(e){
@@ -1300,7 +1450,7 @@ function persist(){
 function flush(){
   if(!sb || !uid || writing || !dirty) return Promise.resolve();
   writing = true; dirty = false;
-  var row = {user_id: uid, done: state.done, picks: state.picks, notes: state.notes, updated_at: new Date().toISOString()};
+  var row = {user_id: uid, done: state.done, picks: state.picks, notes: state.notes, labels: state.labels, updated_at: new Date().toISOString()};
   return sb.from(TABLE).upsert(row).then(function(res){
     writing = false;
     if(res.error){ dirty = true; setSync("err", "Nu s-a salvat în cont (" + res.error.message + "). Rămâne în browser; reîncerc la următoarea modificare."); return; }
@@ -1313,7 +1463,7 @@ function flush(){
 }
 function pull(){
   if(!sb || !uid) return Promise.resolve();
-  return sb.from(TABLE).select("done,picks,notes").eq("user_id", uid).maybeSingle().then(function(res){
+  return sb.from(TABLE).select("done,picks,notes,labels").eq("user_id", uid).maybeSingle().then(function(res){
     if(res.error){ setSync("err", "Nu pot citi din cont (" + res.error.message + ")."); return; }
     if(!res.data){
       /* prima intrare: întâi datele pregătite pentru emailul tău, altfel ce ai bifat în browser */
