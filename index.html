@@ -516,6 +516,18 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
       {tier:"mediu", shop:"Decathlon", name:"DECATHLON Genunchieră de susținere cu armături laterale", price:79.99, qty:2, url:D("genunchiera-de-sustinere-pentru-piciorul-drept-sau-stang-cu-armaturi-laterale","364288"), desc:"Același tricot compresiv, plus barete laterale care întăresc compresia. Cea mai bine notată: 4,7 din 3.869 de recenzii."},
       {tier:"premium", shop:"Decathlon", name:"DECATHLON Genunchieră de susținere nivel 2", price:129.99, qty:2, url:D("genunchiera-de-sustinere-picior-drept-sau-stang-nivel-2","364503"), desc:"Nivel 2 din 5 după Decathlon: tricot compresiv, susțineri laterale, benzi de reglare și inel pentru rotulă. Pentru genunchi care te-au mai durut la coborâri. Nota 4,5 din 558."}
     ]},
+    { id:"saci-impermeabili", name:"Saci impermeabili pentru lucrurile din rucsac", note:"Nu e pe lista organizatorului. Husa de ploaie nu acoperă spatele rucsacului: la ploaie lungă apa intră pe lângă bretele și panoul de spate, iar materialul rucsacului se îmbibă. Ce trebuie să rămână uscat sigur: sacul de dormit, hainele de schimb și stratul cald de seară, plus telefonul, actele și power bank-ul. Cel mai sigur e să combini variantele: un sac menajer gros căptușește tot rucsacul pe dinăuntru, iar sacul de dormit și hainele de schimb stau fiecare în sacul lor etanș. Rulează gura sacilor etanși de cel puțin 3 ori și ține lucrurile deja ude (cortul, geaca de ploaie) în afara lor.", variants:[
+      {tier:"buget", shop:"eMAG", name:"Saci menajeri 130 L, 70 microni, rolă de 10", price:19.83, url:E("/saci-130-l-superstrong-70-microni-70x120-cm-10-buc-rola-negrii-2085/pd/DHKLC37BM/"), desc:"70 × 120 cm, 70 de microni (după vânzător). Un sac îmbracă tot rucsacul pe dinăuntru: pui lucrurile în el, răsucești gura și o îndoi dedesubt. Ia 2–3 cu tine, ca rezervă dacă se rupe unul. Se poate înțepa, deci lucrurile ascuțite stau în afara lui. Vândut de Aspeti (4,8)."},
+      {tier:"mediu", shop:"Decathlon", name:"SIMOND Husă impermeabilă ultra-lejeră 22 L + 13 L", price:129.98, url:D("husa-impermeabila-ultra-lejera-22-litri-rosu","356359"), parts:[
+        {name:"22 L, pentru sacul de dormit", price:69.99, url:D("husa-impermeabila-ultra-lejera-22-litri-rosu","356359")},
+        {name:"13 L, pentru hainele de schimb", price:59.99, url:D("husa-impermeabila-ultra-lejera-13-litri-portocaliu","356422")}
+      ], desc:"IPX5 după Decathlon: cusături etanșe, 5.000 mm coloană de apă, testat o oră sub ploaie directă. Roll-top, nailon 40D, 65 g + 55 g. În 22 L încape un sac de dormit compact (MT500 XL are 14,2 L, MT900 11 L), dar nu Arpenaz-ul de 29 L. Nota 4,8 din 285 și din 484 de recenzii."},
+      {tier:"premium", shop:"Decathlon", name:"SIMOND Husă impermeabilă ultra-lejeră 22 L + 13 L + 7 L", price:179.97, url:D("husa-impermeabila-ultra-lejera-22-litri-rosu","356359"), parts:[
+        {name:"22 L, pentru sacul de dormit", price:69.99, url:D("husa-impermeabila-ultra-lejera-22-litri-rosu","356359")},
+        {name:"13 L, pentru hainele de schimb", price:59.99, url:D("husa-impermeabila-ultra-lejera-13-litri-portocaliu","356422")},
+        {name:"7 L, pentru telefon, acte, power bank, trusă", price:49.99, url:D("husa-impermeabila-ultra-lejera-7-litri-galben","356480")}
+      ], desc:"Setul de la mediu plus unul mic, de 40 g, pentru ce nu are voie să se ude deloc: telefon, acte, power bank, cabluri, trusa de prim-ajutor. 160 g toate trei. Fiecare mărime are altă culoare (roșu, portocaliu, galben), deci găsești din prima ce cauți. Cel de 7 L are nota 4,8 din 718."}
+    ]},
   ]},
 
   { id:"imbracaminte", title:"Îmbrăcăminte", kind:"req", items:[
@@ -619,6 +631,11 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
       {tier:"buget", shop:"Decathlon", name:"QUECHUA Bidon aluminiu 1 L, deschidere rapidă", price:49.99, qty:2, url:D("bidon-din-aluminiu-cu-capac-cu-deschidere-rapida-drumetie-1-l-rosu","330041"), desc:"~120 g bucata. Iei două, sau unul plus o sticlă PET de 1,5 L."},
       {tier:"mediu", shop:"Decathlon", name:"QUECHUA Bidon inox 1 L, capac cu filet", price:59.99, qty:2, url:D("bidon-inox-100-cu-capac-cu-filet-drumetie-1l-bordo","351210"), desc:"Inox, nu dă gust, etanș — poate sta culcat în rucsac."},
       {tier:"premium", shop:"Decathlon", name:"FORCLAZ Rezervor de apă MT500, 2 L", price:74.99, url:D("rezervor-apa-mt500-2l-albastru","306516"), desc:"Exact 2 L într-un singur obiect, cu tub de băut. Bei din mers, se pliază gol."}
+    ]},
+    { id:"bidon", name:"Bidon de apă 1,5 L", note:"Împreună cu un bidon sau o sticlă de 0,5 L acoperă cei 2 L de apă ceruți. Toate trei au gură largă, deci se umplu ușor dintr-un izvor. Niciunul nu e izoterm: în nopțile cu ger ține-l în cort, întors cu capacul în jos, ca să nu înghețe apa la gură.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Bidon aluminiu 1,5 L, dop instant", price:49.99, url:D("bidon-alu-1-5l-cu-100percent-aluminiu-reciclat","330071"), desc:"218 g, aluminiu reciclat, capac cu deschidere rapidă dintr-o mână, blocabil, cu mâner și filtru. Se poate îndoi dacă îl scapi. Nota 4,5 din 2.561 de recenzii."},
+      {tier:"mediu", shop:"Decathlon", name:"QUECHUA Bidon inox 1,5 L, capac cu filet", price:74.99, url:D("bidon-inox-1-5l-cu-capac-cu-filet-din-75percent-otel-reciclat","351201"), desc:"270 g, inox alimentar 18/8 care nu ține gustul, capac cu filet și mâner, Ø 9 × 28,5 cm. Cel mai rezistent la lovituri. Nota 4,3 din 505."},
+      {tier:"premium", shop:"eMAG", name:"NALGENE Wide Mouth Silo Sustain 1,5 L, Tritan", price:141.87, url:E("/sticla-de-apa-nalgene-wide-mouth-silo-sustain-tritan-albastru-1-5-l-2020-0748/pd/DS3DLMYBM/"), desc:"209 g, Tritan fără BPA (50% reciclat), practic indestructibil, cu gură de 63 mm pe care se prind multe filtre de apă. Cel mai ușor dintre cele trei."}
     ]},
     { id:"prosop", name:"Prosop", note:"", variants:[
       {tier:"buget", shop:"Decathlon", name:"Prosop microfibră S, 39×55 cm", price:14.99, url:D("prosop-microfibra-fata-dubla-albastru-verde-marimea-s-39-x-55-cm","341947"), desc:"Mic și foarte ușor. Ajunge pentru față și mâini."},
@@ -978,7 +995,7 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
     "sosete":"Șosete, lenjerie, buff, căciulă", "lenjerie":"Șosete, lenjerie, buff, căciulă", "buff":"Șosete, lenjerie, buff, căciulă", "caciula":"Șosete, lenjerie, buff, căciulă",
     "oala":"Oală, gamelă, tacâmuri", "tacamuri":"Oală, gamelă, tacâmuri",
     "primus":"Arzător (primus)",
-    "apa":"Bidon, cană, prosop", "cana":"Bidon, cană, prosop", "prosop":"Bidon, cană, prosop",
+    "apa":"Bidon, cană, prosop", "bidon":"Bidon, cană, prosop", "cana":"Bidon, cană, prosop", "prosop":"Bidon, cană, prosop",
     "sac-dormit":"Sac de dormit", "izopren":"Izopren / saltea",
     "cort":"Cort", "busola":"Busolă", "bricheta":"Brichetă și aprins focul", "fierastrau":"Fierăstrău de mână",
     "coarda":"Coardă, carabiniere, chingi",
@@ -992,6 +1009,7 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
     "manusi": {verdict:"no", note:"N-am cercetat separat piața second pentru mănuși. La cele impermeabile, membrana și cusăturile lipite se uzează exact în palmă și la degete, iar variantele noi de mai sus pornesc de la 50 de lei — diferența nu merită riscul. Ia-le noi."},
     "poncho": {verdict:"yes", note:"Un poncho e o folie impermeabilă cu glugă: nu are ce să se strice în afară de cusături și capse. Second e ok dacă nu e lipicios pe interior — același test ca la cort. Nou costă 40–110 lei la Decathlon."},
     "genunchiere": {verdict:"no", note:"Ia-le noi: elasticul își pierde compresia cu purtarea și se poartă direct pe piele. Noi pornesc de la 49,99 lei bucata la Decathlon."},
+    "saci-impermeabili": {verdict:"no", note:"Ia-i noi: la un sac etanș folosit nu vezi o cusătură dezlipită sau o gaură mică până nu te plouă. Noi pornesc de la 20 de lei rola de saci menajeri sau 50–70 de lei un sac SIMOND."},
     "spray-imperm": {verdict:"no", note:"Cumpără-l nou: la un spray început nu știi cât a mai rămas în el și cât de vechi e, iar unul nou pornește de la 25–40 de lei la Decathlon."},
     "butelie": {verdict:"no", note:"Cartușul de gaz se cumpără întotdeauna nou: unul început sau vechi poate avea valva slăbită. Ia cartușe cu filet, compatibile cu arzătorul."}
   };
