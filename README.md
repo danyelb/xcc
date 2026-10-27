@@ -4,9 +4,18 @@ Lista de echipament pentru XCC (5–8 noiembrie 2026, Maramureș), cu variante b
 
 Pagina e statică și stă pe GitHub Pages: https://danyelb.github.io/xcc/
 
-Bifele, alegerile, notițele și etichetele se salvează în Supabase după login cu link pe email. Fără login rămân în browser.
+Bifele, alegerile, notițele, etichetele și împachetarea se salvează în Supabase după login cu link pe email. Fără login rămân în browser.
 
 Fiecare poziție poate avea mai multe etichete (până la 8, de maximum 30 de caractere): alegi din sugestii sau scrii una nouă în panoul care se deschide sub rând. Etichetele apar mici, sub numele poziției, în listă.
+
+## Împachetare
+
+Tabul „Împachetare” arată toate pozițiile, împărțite pe zone din rucsac, în ordinea în care le pui: acasă, înainte de plecare; fundul rucsacului; mijloc, lângă spate; sus; buzunare și capac; pe exterior; pe tine.
+
+- Bifa de împachetare e separată de bifa „am deja”. Ce bifezi coboară la capătul zonei.
+- Din ⋯ muți o poziție în altă zonă sau o scoți din listă („Nu-l iau”). Ce ai scos apare jos, la „Nu le iei”, de unde o readuci.
+- Poți adăuga poziții de mână (până la 100). Apar și la împachetare, și în „Al meu”, la „Adăugate de mine”, cu bifă, etichete și notiță.
+- „Debifează tot” golește doar bifele de împachetare, după ce confirmi.
 
 ## Pe telefon, ca aplicație
 
