@@ -339,6 +339,25 @@ h1{
 .lbl-s:hover{border-style:solid;border-color:var(--ink-2);color:var(--ink)}
 .lbl-s::before{content:"+ ";color:var(--muted)}
 
+/* ---------- ascunde după etichete ---------- */
+.sum-btns{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pill-2{background:transparent;color:var(--ink);border-color:var(--line)}
+.pill-2:hover{border-color:var(--ink-2)}
+.pill-2::after{content:"\00a0\25BE";color:var(--muted)}
+.pill-2[aria-expanded="true"]::after{content:"\00a0\25B4"}
+.pill-2.is-on{border-color:var(--accent)}
+.lh{display:grid;gap:10px;padding:12px 14px;border:1px solid var(--line-2);border-radius:12px;background:var(--surface-2)}
+.lh[hidden]{display:none}
+.lh-chips{display:flex;flex-wrap:wrap;gap:6px}
+.lh-c{font-size:.86rem;padding:5px 10px;border-radius:7px;gap:6px;cursor:pointer}
+.lh-c .lh-k{font-family:var(--f-mono);font-size:.76rem;font-weight:500;opacity:.85}
+.lh-c:hover{border-color:var(--lc)}
+.lh-c[aria-pressed="true"]{background:transparent;border-style:dashed;color:var(--muted);text-decoration:line-through}
+.lh-c[aria-pressed="true"] .lh-k{text-decoration:none}
+.lh-none{margin:0;font-size:.86rem;color:var(--muted)}
+.lh-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;font-size:.86rem;color:var(--muted)}
+.lh-foot:empty{display:none}
+
 /* ---------- împachetare ---------- */
 .unpack{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .unpack-q{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.92rem;font-weight:600}
@@ -484,7 +503,10 @@ h1{
     <p class="mine" id="s-mine" hidden></p>
     <div class="sum-foot">
       <p class="hint" id="s-hint">Apasă pe un rând ca să vezi variantele chiar sub el și să-i pui etichete. Bifează ce ai deja.</p>
-      <button type="button" class="pill" id="only" aria-pressed="false">Doar ce-mi lipsește</button>
+      <div class="sum-btns">
+        <button type="button" class="pill" id="only" aria-pressed="false">Doar ce-mi lipsește</button>
+        <button type="button" class="pill pill-2" id="lh-btn" aria-expanded="false" aria-controls="lh">Ascunde după etichete</button>
+      </div>
       <div class="unpack" id="unpack-box" hidden>
         <button type="button" class="btn-sm" id="unpack">Debifează tot</button>
         <div class="unpack-q" id="unpack-q" role="group" aria-labelledby="unpack-txt" hidden>
@@ -493,6 +515,11 @@ h1{
           <button type="button" class="btn-sm" id="unpack-no">Renunț</button>
         </div>
       </div>
+    </div>
+    <div class="lh" id="lh" hidden>
+      <p class="sub-h" id="lh-h">Ascunde pozițiile cu eticheta</p>
+      <div class="lh-chips" id="lh-chips" role="group" aria-labelledby="lh-h"></div>
+      <div class="lh-foot" id="lh-foot"></div>
     </div>
     <p class="addf-msg" id="pack-msg" role="status" aria-live="polite"></p>
     <div class="acct">
@@ -1187,9 +1214,19 @@ function cleanLbls(a){
   });
   return out;
 }
+/* etichetele ascunse: pozițiile care au oricare dintre ele dispar din toate tabelele și din cifre */
+var HIDE_MAX = 60;
+function cleanHide(a){
+  var out = [], seen = {};
+  (Array.isArray(a) ? a : []).forEach(function(x){
+    var v = normLbl(x), k = v.toLowerCase();
+    if(v && !seen[k] && out.length < HIDE_MAX){ seen[k] = true; out.push(v); }
+  });
+  return out;
+}
 function normName(s){ return typeof s === "string" ? s.replace(/\s+/g, " ").trim().slice(0, CUSTOM_LEN) : ""; }
 function clean(s){
-  var out = {done:{}, picks:{}, notes:{}, labels:{}, pack:{packed:{}, hidden:{}, zone:{}}, custom:{}};
+  var out = {done:{}, picks:{}, notes:{}, labels:{}, pack:{packed:{}, hidden:{}, zone:{}}, custom:{}, prefs:{hide:[]}};
   var d = obj(s && s.done), p = obj(s && s.picks), n = obj(s && s.notes), l = obj(s && s.labels);
   var c = obj(s && s.custom), pk = obj(s && s.pack);
   /* pozițiile adăugate de mână: id "u-…", nume, zona din rucsac, momentul adăugării (pentru ordine) */
@@ -1206,6 +1243,7 @@ function clean(s){
   Object.keys(pp).forEach(function(k){ if(ok(k) && pp[k]) out.pack.packed[k] = true; });
   Object.keys(ph).forEach(function(k){ if(ITEM[k] && ph[k]) out.pack.hidden[k] = true; });
   Object.keys(pz).forEach(function(k){ if(ITEM[k] && ZONE_BY[pz[k]] && pz[k] !== (ZONE_OF[k] || ZONE_DEF)) out.pack.zone[k] = pz[k]; });
+  out.prefs.hide = cleanHide(obj(s && s.prefs).hide);
   return out;
 }
 var state = clean(lsGet(LS_KEY));
@@ -1220,7 +1258,8 @@ if(!lsGet(LS_KEY)){
 function isDone(id){ return Object.prototype.hasOwnProperty.call(state.done, id) ? state.done[id] : !!OWNED[id]; }
 function hasData(){
   return Object.keys(state.done).length + Object.keys(state.picks).length + Object.keys(state.notes).length + Object.keys(state.labels).length +
-    Object.keys(state.custom).length + Object.keys(state.pack.packed).length + Object.keys(state.pack.hidden).length + Object.keys(state.pack.zone).length > 0;
+    Object.keys(state.custom).length + Object.keys(state.pack.packed).length + Object.keys(state.pack.hidden).length + Object.keys(state.pack.zone).length +
+    state.prefs.hide.length > 0;
 }
 
 /* pozițiile tale, cu aceeași formă ca cele din listă (fără variante) */
@@ -1233,12 +1272,19 @@ function catOf(id){ return state.custom[id] ? {id:CUSTOM_CAT.id, items:customLis
 function zoneOf(id){ return state.custom[id] ? state.custom[id].z : (state.pack.zone[id] || ZONE_OF[id] || ZONE_DEF); }
 function isPacked(id){ return !!state.pack.packed[id]; }
 function isHidden(id){ return !!state.pack.hidden[id]; }
+function hideHas(v){ var k = String(v).toLowerCase(); return state.prefs.hide.some(function(x){ return x.toLowerCase() === k; }); }
+function lblHidden(id){
+  var a = state.labels[id];
+  return !!(a && a.length && state.prefs.hide.length && a.some(hideHas));
+}
+function lblShown(it){ return !lblHidden(it.id); }
 
 var ui = obj(lsGet(LS_UI));
 if(!TABS.some(function(t){ return t.id === ui.tab; })) ui.tab = "mine";
 ui.only = !!ui.only;
+ui.lh = !!ui.lh;
 if(!ZONE_BY[ui.addZone]) ui.addZone = ZONE_DEF;
-function saveUi(){ lsSet(LS_UI, {tab:ui.tab, only:ui.only, info:!!ui.info, addZone:ui.addZone, hid:!!ui.hid}); }
+function saveUi(){ lsSet(LS_UI, {tab:ui.tab, only:ui.only, info:!!ui.info, addZone:ui.addZone, hid:!!ui.hid, lh:!!ui.lh}); }
 
 var openId = null;
 var keep = {};   /* rânduri bifate acum, care rămân vizibile până schimbi filtrul */
@@ -1247,12 +1293,13 @@ var menuId = null;   /* rândul de la Împachetare cu meniul ⋯ deschis */
 /* ---------- calcule ---------- */
 function tabOf(id){ return TABS.filter(function(t){ return t.id === id; })[0]; }
 function catsOf(tab){ return DATA.filter(function(c){ return tab.kinds.indexOf(c.kind) >= 0; }); }
-function itemsOf(tab){
+function tabItems(tab){
   var a = [];
   catsOf(tab).forEach(function(c){ a = a.concat(c.items); });
   if(tab.id === "mine") a = a.concat(customList());
   return a;
 }
+function itemsOf(tab){ return tabItems(tab).filter(lblShown); }
 function stats(tab){
   var items = itemsOf(tab), miss = items.filter(function(it){ return !isDone(it.id); });
   var s = {total:items.length, done:items.length - miss.length, miss:miss.length, buget:0, mediu:0, premium:0, mine:0, pickedN:0};
@@ -1266,7 +1313,7 @@ function stats(tab){
 }
 function packAll(){ return ALL_ITEMS.concat(customList()); }
 function packStats(){
-  var all = packAll(), vis = all.filter(function(it){ return !isHidden(it.id); });
+  var all = packAll().filter(lblShown), vis = all.filter(function(it){ return !isHidden(it.id); });
   var packed = vis.filter(function(it){ return isPacked(it.id); }).length;
   return {total:vis.length, packed:packed, left:vis.length - packed, hidden:all.length - vis.length};
 }
@@ -1488,11 +1535,11 @@ function prowHtml(it){
   '</div>';
 }
 function zoneCount(zid){
-  var a = packAll().filter(function(it){ return !isHidden(it.id) && zoneOf(it.id) === zid; });
+  var a = packAll().filter(function(it){ return !isHidden(it.id) && !lblHidden(it.id) && zoneOf(it.id) === zid; });
   return {n:a.length, packed:a.filter(function(it){ return isPacked(it.id); }).length};
 }
 function renderPack(){
-  var all = packAll(), h = "", ci = {};
+  var all = packAll().filter(lblShown), h = "", ci = {};
   customList().forEach(function(it, i){ ci[it.id] = i; });
   var rank = function(it){ return it.custom ? 100000 + ci[it.id] : ORDER[it.id]; };
   ZONES.forEach(function(z){
@@ -1523,9 +1570,10 @@ function renderList(){
   var tab = tabOf(ui.tab), h = "";
   if(tab.pack){ openId = null; renderPack(); return; }
   catsOf(tab).forEach(function(cat){
-    var items = cat.items;
+    var items = cat.items.filter(lblShown);
     var doneN = items.filter(function(it){ return isDone(it.id); }).length;
-    var shown = items.filter(function(it){ return !ui.only || !isDone(it.id) || keep[it.id]; });
+    var shown = cat.items.filter(function(it){ return (!lblHidden(it.id) || keep[it.id]) && (!ui.only || !isDone(it.id) || keep[it.id]); });
+    if(!items.length && !shown.length) return;   /* tot grupul e ascuns după etichete */
     h += '<section class="grp" id="g-' + cat.id + '"><div class="grp-head"><h2>' + esc(CAT_NAME[cat.id] || cat.title) + '</h2>';
     h += '<span class="grp-n" id="gn-' + cat.id + '">' + doneN + '/' + items.length + '</span>';
     if(cat.tag) h += '<span class="grp-tag">' + esc(cat.tag) + '</span>';
@@ -1535,9 +1583,9 @@ function renderList(){
     h += '</section>';
   });
   if(tab.id === "mine"){
-    var cl = customList();
+    var call = customList(), cl = call.filter(lblShown);
     var cdone = cl.filter(function(it){ return isDone(it.id); }).length;
-    var cshown = cl.filter(function(it){ return !ui.only || !isDone(it.id) || keep[it.id]; });
+    var cshown = call.filter(function(it){ return (!lblHidden(it.id) || keep[it.id]) && (!ui.only || !isDone(it.id) || keep[it.id]); });
     h += '<section class="grp" id="g-custom"><div class="grp-head"><h2>' + esc(CUSTOM_CAT.title) + '</h2>';
     if(cl.length) h += '<span class="grp-n" id="gn-custom">' + cdone + '/' + cl.length + '</span>';
     h += '</div>';
@@ -1545,6 +1593,7 @@ function renderList(){
     else if(cshown.length) h += '<div class="rows">' + cshown.map(rowHtml).join("") + '</div>';
     h += addFormHtml("mine") + '</section>';
   }
+  if(!h) h = '<p class="grp-empty">Toate pozițiile din tabul ăsta sunt ascunse după etichete. Le readuci de sus, din „Ascunde după etichete”.</p>';
   listEl.innerHTML = h;
   if(openId && !document.getElementById("r-" + openId)) openId = null;
   listEl.setAttribute("aria-labelledby", "tab-" + ui.tab);
@@ -1556,22 +1605,91 @@ function renderTabs(){
     b.setAttribute("aria-selected", String(t.id === ui.tab));
     if(t.pack){
       var ps = packStats();
+      if(!ps.total){ n.textContent = "–"; n.className = "tab-n"; n.setAttribute("aria-label", "nimic de pus"); return; }
       n.textContent = ps.left ? ps.left : "✓";
       n.className = "tab-n" + (ps.left ? "" : " is-zero");
       n.setAttribute("aria-label", ps.left ? ps.left + " de pus în rucsac" : "totul e în rucsac");
       return;
     }
     var s = stats(t);
+    if(!s.total){
+      n.textContent = "–"; n.className = "tab-n";
+      n.setAttribute("aria-label", "toate ascunse după etichete");
+      return;
+    }
     n.textContent = s.miss ? s.miss : "✓";
     n.className = "tab-n" + (s.miss ? " has-miss" : " is-zero");
     n.setAttribute("aria-label", s.miss ? s.miss + " lipsesc" : "complet");
   });
 }
 
+var lhBtn = document.getElementById("lh-btn"), lhEl = document.getElementById("lh");
+var TAB_IN = {mine:"în „Al meu”", team:"în „De echipă”", opt:"în „Opțional”", pack:"la Împachetare"};
+function lhCount(tab){
+  var a = tab.pack ? packAll().filter(function(it){ return !isHidden(it.id); }) : tabItems(tab);
+  return a.filter(function(it){ return lblHidden(it.id); }).length;
+}
+function pozAscunse(n){
+  if(!n) return "nicio poziție ascunsă";
+  if(n === 1) return "o poziție ascunsă";
+  return n + (n % 100 === 0 || n % 100 >= 20 ? " de" : "") + " poziții ascunse";
+}
+/* toate etichetele folosite, plus cele ascunse care nu mai sunt pe nicio poziție */
+function allLbls(){
+  var cnt = {}, disp = {};
+  packAll().forEach(function(it){
+    (state.labels[it.id] || []).forEach(function(v){ var k = v.toLowerCase(); if(!disp[k]) disp[k] = v; cnt[k] = (cnt[k] || 0) + 1; });
+  });
+  state.prefs.hide.forEach(function(v){ var k = v.toLowerCase(); if(!disp[k]) disp[k] = v; });
+  return Object.keys(disp).sort(function(a, b){ return disp[a].localeCompare(disp[b], "ro"); })
+    .map(function(k){ return {v:disp[k], n:cnt[k] || 0, on:hideHas(k)}; });
+}
+function renderLh(){
+  var tab = tabOf(ui.tab), nh = state.prefs.hide.length, n = lhCount(tab);
+  lhBtn.classList.toggle("is-on", nh > 0);
+  lhBtn.setAttribute("aria-expanded", String(ui.lh));
+  lhBtn.textContent = nh ? "Ascunde după etichete · " + n + (n === 1 ? " ascunsă" : " ascunse") : "Ascunde după etichete";
+  lhEl.hidden = !ui.lh;
+  if(!ui.lh) return;
+  var L = allLbls();
+  document.getElementById("lh-chips").innerHTML = L.length ? L.map(function(x){
+    return '<button type="button" class="' + lblClass(x.v) + ' lh-c" data-lh="' + esc(x.v) + '" aria-pressed="' + x.on + '"' +
+      ' aria-label="Ascunde ' + esc(x.v) + ', ' + (x.n === 1 ? "o poziție" : x.n + " poziții") + '">' +
+      esc(x.v) + '<span class="lh-k" aria-hidden="true">' + x.n + '</span></button>';
+  }).join("") : '<p class="lh-none">Nu ai pus încă nicio etichetă. Le pui din panoul care se deschide sub o poziție.</p>';
+  var f = document.getElementById("lh-foot");
+  if(!L.length) f.innerHTML = "";
+  else if(!nh) f.innerHTML = '<span>Apasă pe o etichetă ca să ascunzi pozițiile care o au. Mai apeși o dată ca să le readuci.</span>';
+  else f.innerHTML = '<span>' + pozAscunse(n).replace(/^./, function(c){ return c.toUpperCase(); }) + ' ' + TAB_IN[tab.id] + '</span>' +
+    '<button type="button" class="btn-sm" id="lh-all">Arată tot</button>';
+}
+function toggleHideLbl(v){
+  var a = state.prefs.hide.slice(), k = v.toLowerCase(), i = -1;
+  a.forEach(function(x, j){ if(x.toLowerCase() === k) i = j; });
+  if(i >= 0) a.splice(i, 1);
+  else { if(a.length >= HIDE_MAX) return; a.push(normLbl(v)); }
+  state.prefs.hide = a; keep = {};
+  persist(); renderAll();
+  var nb = Array.prototype.filter.call(lhEl.querySelectorAll("[data-lh]"), function(b){ return b.getAttribute("data-lh").toLowerCase() === k; })[0];
+  if(nb) nb.focus({preventScroll:true});
+}
+function showAllLbls(){
+  state.prefs.hide = []; keep = {};
+  persist(); renderAll();
+  lhBtn.focus({preventScroll:true});
+}
+lhBtn.addEventListener("click", function(){ ui.lh = !ui.lh; saveUi(); renderLh(); });
+lhEl.addEventListener("click", function(e){
+  var c = e.target.closest("[data-lh]");
+  if(c){ toggleHideLbl(c.getAttribute("data-lh")); return; }
+  if(e.target.closest("#lh-all")) showAllLbls();
+});
+
 var HINT_LIST = "Apasă pe un rând ca să vezi variantele chiar sub el și să-i pui etichete. Bifează ce ai deja.";
 var HINT_PACK = "Bifează ce ai pus în rucsac; ce bifezi coboară la capătul zonei. Din ⋯ muți un lucru în altă zonă sau îl scoți din listă.";
 function renderSummary(){
   var tab = tabOf(ui.tab), packMode = !!tab.pack;
+  renderLh();
   document.getElementById("s-hint").textContent = packMode ? HINT_PACK : HINT_LIST;
   document.getElementById("only").hidden = packMode;
   document.getElementById("unpack-box").hidden = !packMode;
@@ -1595,10 +1713,11 @@ function renderSummary(){
   var big = document.getElementById("s-big");
   big.textContent = s.miss;
   big.classList.toggle("is-zero", s.miss === 0);
-  document.getElementById("s-txt").textContent = (s.miss === 1 ? "lipsește" : "lipsesc") + " · " + s.done + " din " + s.total + " bifate";
+  document.getElementById("s-txt").textContent = s.total ? (s.miss === 1 ? "lipsește" : "lipsesc") + " · " + s.done + " din " + s.total + " bifate" : "toate pozițiile de aici sunt ascunse după etichete";
   document.getElementById("s-bar").style.width = (s.total ? Math.round(s.done / s.total * 100) : 0) + "%";
   var cost = document.getElementById("s-cost");
-  if(s.miss){
+  if(!s.total) cost.textContent = "Ce ascunzi după etichete nu intră în costuri.";
+  else if(s.miss){
     cost.innerHTML = '<span class="lab">Ce lipsește costă</span>' +
       '<span><span class="c-buget">buget</span> <b>' + fmt0(s.buget) + '</b></span>' +
       '<span><span class="c-mediu">mediu</span> <b>' + fmt0(s.mediu) + '</b></span>' +
@@ -1633,12 +1752,13 @@ function setOpen(id, open){
   else { p.hidden = true; p.innerHTML = ""; }
 }
 function toggleOpen(id){
-  var row = document.getElementById("r-" + id);
+  var row = document.getElementById("r-" + id), closing = openId === id;
   keepRowStill(row, function(){
     if(openId && openId !== id) setOpen(openId, false);
     if(openId === id){ setOpen(id, false); openId = null; }
     else { setOpen(id, true); openId = id; }
   });
+  if(closing && keep[id] && lblHidden(id)){ delete keep[id]; renderList(); }
 }
 function refreshRow(id){
   var row = document.getElementById("r-" + id);
@@ -1647,8 +1767,8 @@ function refreshRow(id){
   row.classList.toggle("is-done", d);
   document.getElementById("c-" + id).setAttribute("aria-checked", String(d));
   document.getElementById("s-" + id).innerHTML = subHtml(itemOf(id));
-  var cat = catOf(id), gn = document.getElementById("gn-" + cat.id);
-  if(gn) gn.textContent = cat.items.filter(function(it){ return isDone(it.id); }).length + "/" + cat.items.length;
+  var cat = catOf(id), gn = document.getElementById("gn-" + cat.id), vi = cat.items.filter(lblShown);
+  if(gn) gn.textContent = vi.filter(function(it){ return isDone(it.id); }).length + "/" + vi.length;
 }
 function toggleDone(id){
   state.done[id] = !isDone(id);
@@ -1682,7 +1802,12 @@ function addLabel(id, raw){
   if(a.length >= LBL_PER) return false;
   a.push(v);
   state.labels[id] = a;
-  refreshLbls(id); persist();
+  refreshLbls(id);
+  if(hideHas(v)){
+    keep[id] = true;
+    say("Eticheta „" + v + "” e ascunsă, așa că poziția dispare din listă când închizi panoul.");
+  }
+  renderTabs(); renderSummary(); persist();
   return true;
 }
 function delLabel(id, i){
@@ -1690,7 +1815,7 @@ function delLabel(id, i){
   if(i < 0 || i >= a.length) return;
   a.splice(i, 1);
   if(a.length) state.labels[id] = a; else delete state.labels[id];
-  refreshLbls(id); persist();
+  refreshLbls(id); renderTabs(); renderSummary(); persist();
 }
 /* după ce butonul apăsat dispare, mut focusul pe câmp doar la tastatură (pe telefon nu deschid tastatura degeaba) */
 function focusLblInput(id, kb){
@@ -1826,7 +1951,7 @@ unpackBtn.addEventListener("click", function(){
 });
 document.getElementById("unpack-no").addEventListener("click", function(){ hideUnpackQ(true); });
 document.getElementById("unpack-yes").addEventListener("click", function(){
-  var n = Object.keys(state.pack.packed).length;
+  var n = packStats().packed;
   state.pack.packed = {};
   menuId = null; clearTimeout(sortTimer);
   hideUnpackQ(false);
@@ -1954,7 +2079,7 @@ function flush(){
   if(!sb || !uid || writing || !dirty) return Promise.resolve();
   if(navigator.onLine === false){ setSync("local", OFFLINE_TXT); return Promise.resolve(); }
   writing = true; dirty = false;
-  var row = {user_id: uid, done: state.done, picks: state.picks, notes: state.notes, labels: state.labels, pack: state.pack, custom: state.custom, updated_at: new Date().toISOString()};
+  var row = {user_id: uid, done: state.done, picks: state.picks, notes: state.notes, labels: state.labels, pack: state.pack, custom: state.custom, prefs: state.prefs, updated_at: new Date().toISOString()};
   return sb.from(TABLE).upsert(row).then(function(res){
     writing = false;
     if(res.error){
@@ -1976,7 +2101,7 @@ function pull(){
   /* modificările făcute offline au prioritate: le trimit în loc să citesc varianta veche din cont */
   if(pendingFor(uid)){ dirty = true; return flush(); }
   if(navigator.onLine === false){ setSync("local", OFFLINE_TXT); return Promise.resolve(); }
-  return sb.from(TABLE).select("done,picks,notes,labels,pack,custom").eq("user_id", uid).maybeSingle().then(function(res){
+  return sb.from(TABLE).select("done,picks,notes,labels,pack,custom,prefs").eq("user_id", uid).maybeSingle().then(function(res){
     if(res.error){
       if(isOffline(res.error)) setSync("local", OFFLINE_TXT);
       else setSync("err", "Nu pot citi din cont (" + res.error.message + ").");

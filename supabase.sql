@@ -1,5 +1,5 @@
 -- Lista XCC: un rând per utilizator, cu bifele, alegerile, notițele, etichetele,
--- bifele de împachetare și pozițiile adăugate de mână.
+-- bifele de împachetare, pozițiile adăugate de mână și etichetele ascunse.
 -- Fiecare vede și modifică doar rândul lui (Row Level Security).
 
 create table if not exists public.xcc_state (
@@ -10,14 +10,16 @@ create table if not exists public.xcc_state (
   labels     jsonb not null default '{}'::jsonb check (jsonb_typeof(labels) = 'object'),
   pack       jsonb not null default '{}'::jsonb check (jsonb_typeof(pack) = 'object'),     -- {packed:{id:true}, hidden:{id:true}, zone:{id:zona}}
   custom     jsonb not null default '{}'::jsonb check (jsonb_typeof(custom) = 'object'),   -- {"u-…": {n:nume, z:zona, t:moment}}
+  prefs      jsonb not null default '{}'::jsonb check (jsonb_typeof(prefs) = 'object'),    -- {hide: [etichete ascunse]}
   updated_at timestamptz not null default now()
 );
 
--- pentru tabelele create înainte de etichete și de împachetare
+-- pentru tabelele create înainte de etichete, de împachetare și de etichetele ascunse
 alter table public.xcc_state
   add column if not exists labels jsonb not null default '{}'::jsonb,
   add column if not exists pack   jsonb not null default '{}'::jsonb check (jsonb_typeof(pack) = 'object'),
-  add column if not exists custom jsonb not null default '{}'::jsonb check (jsonb_typeof(custom) = 'object');
+  add column if not exists custom jsonb not null default '{}'::jsonb check (jsonb_typeof(custom) = 'object'),
+  add column if not exists prefs  jsonb not null default '{}'::jsonb check (jsonb_typeof(prefs) = 'object');
 
 alter table public.xcc_state enable row level security;
 

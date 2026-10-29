@@ -4,9 +4,13 @@ Lista de echipament pentru XCC (5–8 noiembrie 2026, Maramureș), cu variante b
 
 Pagina e statică și stă pe GitHub Pages: https://danyelb.github.io/xcc/
 
-Bifele, alegerile, notițele, etichetele și împachetarea se salvează în Supabase după login cu link pe email. Fără login rămân în browser.
+Bifele, alegerile, notițele, etichetele, împachetarea și etichetele ascunse se salvează în Supabase după login cu link pe email. Fără login rămân în browser.
 
 Fiecare poziție poate avea mai multe etichete (până la 8, de maximum 30 de caractere): alegi din sugestii sau scrii una nouă în panoul care se deschide sub rând. Etichetele apar mici, sub numele poziției, în listă.
+
+## Ascunde după etichete
+
+Din sumar, „Ascunde după etichete” deschide lista tuturor etichetelor folosite. Apeși pe o etichetă ca s-o ascunzi: pozițiile care o au dispar din toate tabelele, inclusiv de la Împachetare, și nu mai intră nici în cifrele de sus (câte lipsesc, cât costă, câte mai ai de pus în rucsac). Apeși din nou ca să le readuci, sau „Arată tot”. Alegerea se salvează în cont, la fel pe telefon și pe laptop.
 
 ## Împachetare
 
