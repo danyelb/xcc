@@ -743,6 +743,11 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
       {tier:"mediu", shop:"Decathlon", name:"SIMOND Sac de dormit trekking 0 °C MT500", price:399.99, url:D("sac-de-dormit-de-trekking-0degc-mt500","346447"), desc:"Confort 0 °C, limită −5 °C, sintetic — izolează și când e umed. Dacă ești lat în umeri, ia mărimea XL (1,54 kg)."},
       {tier:"premium", shop:"Decathlon", name:"SIMOND Sac de dormit 0 °C din puf MT900", price:899.99, url:D("sac-de-dormit-de-trekking-0degc-din-puf-usor-si-compact-mt900","355074"), desc:"Confort 0 °C, limită −5 °C, 930 g, 11 L. Cea mai mare economie de greutate, dar puful ud nu mai ține cald: ține-l în sac impermeabil."}
     ]},
+    { id:"cearsaf-sac", name:"Cearșaf pentru sacul de dormit (liner)", note:"Nu e pe lista organizatorului. Te bagi în el înainte să intri în sacul de dormit: ține sacul curat, pentru că transpirația rămâne în cearșaf, care se spală ușor, și adaugă puțină căldură. Cât încălzește depinde de sac și de saltea; cifrele producătorilor sunt maxime. La împachetare stă în fundul rucsacului, lângă sacul de dormit.", variants:[
+      {tier:"buget", shop:"Decathlon", name:"QUECHUA Cearșaf din bumbac pentru sac de dormit", price:89.99, url:D("cearsaf-din-bumbac-sac-de-dormit-bej","324944"), desc:"100% bumbac, dreptunghiular, 220 × 85 cm, cu buzunar pentru pernă. E mai mult pentru igienă decât pentru căldură și e greu pentru XCC: 500 g și 2,8 L împachetat. Se spală la mașină. Nota 4,6 din 640 de recenzii."},
+      {tier:"mediu", shop:"Decathlon", name:"FORCLAZ Cearșaf din mătase MT500", price:229.99, url:D("cearsaf-din-matase-sac-de-dormit-trekking-mt500-alb","323651"), desc:"100% mătase, în formă de mumie: 220 cm lungime, 77 cm la cap, 54 cm la picioare. Doar 110 g și 0,5 L, cât un pumn. Încălzește puțin, dar e plăcut pe piele și nu ocupă loc. Se spală la mașină. Nota 4,6 din 675."},
+      {tier:"premium", shop:"Decathlon (marketplace)", name:"SEA TO SUMMIT Reactor Midweight, mărimea L", price:307.65, url:"https://www.decathlon.ro/p/mp/sea-to-summit/wkladka-do-spiwora-sea-to-summit-reactor-midweight-l-beluga/_/R-p-b41c9f62-e8c8-40b4-8fb6-e818dd67e8bf", desc:"Țesătură termică Thermolite Pro, elastică, cu deschideri pentru brațe. După Sea to Summit adaugă „până la +6 °C” dacă sacul și salteaua sunt bune; în practică, mai puțin. 345 g la mărimea Short, cea L e puțin mai grea. Vândut de Sports Lab RO prin Decathlon. Varianta Reactor Lightweight (270,50 lei) adaugă „până la +4 °C” și are 248 g."}
+    ]},
     { id:"izopren", name:"Izopren sau saltea", note:"Pe sol înghețat ai nevoie de R ≥ 4. Valorile R se adună când pui două saltele una peste alta. Salteaua MT900 ușoară (R 1,5) din versiunea anterioară a listei e de vară — nu o lua.", variants:[
       {tier:"buget", shop:"Decathlon", name:"SIMOND Izopren pliabil MT500, 180×55 cm", price:94.99, url:D("izopren-pliabil-din-spuma-trekking-mt500-180-x-55-cm-1-persoana-gri","174619"), desc:"R 2,1, 370 g, spumă pliabilă, nu se sparge. Singur e la limită pentru noiembrie — dormi îmbrăcat."},
       {tier:"mediu", shop:"Decathlon", name:"FORCLAZ Autogonflabilă MT100 L + izopren MT500", price:294.98, url:D("saltea-autogonflabila-trekking-l","124065"), desc:"Autogonflabila (R 2,7, 199,99 lei) pusă peste izoprenul MT500 (R 2,1, 94,99 lei) dă R ~4,8. Combinația clasică pentru sol înghețat."},
@@ -1104,6 +1109,7 @@ var D = function(slug, id){ return "https://www.decathlon.ro/p/" + slug + "/_/R-
     "genunchiere": {verdict:"no", note:"Ia-le noi: elasticul își pierde compresia cu purtarea și se poartă direct pe piele. Noi pornesc de la 49,99 lei bucata la Decathlon."},
     "saci-impermeabili": {verdict:"no", note:"Ia-i noi: la un sac etanș folosit nu vezi o cusătură dezlipită sau o gaură mică până nu te plouă. Noi pornesc de la 20 de lei rola de saci menajeri sau 50–70 de lei un sac SIMOND."},
     "lanterna": {verdict:"care", note:"Merge și second-hand, e un obiect simplu, din metal. Ia-o doar cu acumulatorul original, pentru că el se uzează primul, și cere o poză cu ea aprinsă. Ține cont că XCC începe pe 5 noiembrie, deci trebuie să ajungă până atunci."},
+    "cearsaf-sac": {verdict:"care", note:"Merge și second-hand, pentru că se spală la mașină. Verifică să nu aibă găuri sau cusături desfăcute; la Reactor, să nu fie țesătura elastică lăsată."},
     "spray-imperm": {verdict:"no", note:"Cumpără-l nou: la un spray început nu știi cât a mai rămas în el și cât de vechi e, iar unul nou pornește de la 25–40 de lei la Decathlon."},
     "butelie": {verdict:"no", note:"Cartușul de gaz se cumpără întotdeauna nou: unul început sau vechi poate avea valva slăbită. Ia cartușe cu filet, compatibile cu arzătorul."}
   };
@@ -1139,7 +1145,7 @@ ZONES.forEach(function(z){ ZONE_BY[z.id] = z; });
 var ZONE_DEF = "sus";
 var ZONE_OF = {
   "spray-imperm":"acasa",
-  "saci-impermeabili":"fund", "sac-dormit":"fund", "pantaloni-corp":"fund", "lenjerie":"fund", "sosete":"fund",
+  "saci-impermeabili":"fund", "sac-dormit":"fund", "cearsaf-sac":"fund", "pantaloni-corp":"fund", "lenjerie":"fund", "sosete":"fund",
   "tricou":"fund", "pantaloni-scurti":"fund", "perna":"fund", "dopuri":"fund", "prosop":"fund",
   "oala":"mijloc", "tacamuri":"mijloc", "cana":"mijloc", "primus":"mijloc", "butelie":"mijloc", "cort":"mijloc", "biblie":"mijloc",
   "jacheta":"sus", "pantaloni-ploaie":"sus", "polar":"sus", "caciula":"sus", "manusi":"sus", "poncho":"sus", "folie":"sus",
